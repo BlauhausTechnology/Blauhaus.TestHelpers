@@ -8,7 +8,7 @@ using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
 
-namespace Blauhaus.Common.TestHelpers.Http.MockBuilders
+namespace Blauhaus.TestHelpers.Http.MockBuilders
 {
     public class HttpMessageHandlerMockBuilder : Mock<HttpMessageHandler>
     {

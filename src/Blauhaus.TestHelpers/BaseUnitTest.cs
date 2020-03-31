@@ -1,7 +1,6 @@
 ﻿using AutoFixture;
-using Moq;
 
-namespace Blauhaus.Common.TestHelpers
+namespace Blauhaus.TestHelpers
 {
     public abstract class BaseUnitTest<TSut> where TSut : class
     {

@@ -9,7 +9,7 @@ using HotChocolate.Execution;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
-namespace Blauhaus.Common.TestHelpers.Hotchocolate.Extensions
+namespace Blauhaus.TestHelpers.Hotchocolate.Extensions
 {
     public static class ExecutionResultExtensions
     {
@@ -78,7 +78,7 @@ namespace Blauhaus.Common.TestHelpers.Hotchocolate.Extensions
             var result = (ReadOnlyQueryResult) executionResult;
             
             using var stream = new MemoryStream();
-            
+             
             var resultSerializer = new JsonQueryResultSerializer();
             resultSerializer.SerializeAsync(
                 result, stream);

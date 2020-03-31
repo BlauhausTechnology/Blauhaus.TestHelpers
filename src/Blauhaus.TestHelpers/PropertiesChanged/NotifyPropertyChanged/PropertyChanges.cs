@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using Blauhaus.Common.Utils.Extensions;
 
-namespace Blauhaus.Common.TestHelpers.PropertiesChanged.NotifyPropertyChanged
+namespace Blauhaus.TestHelpers.PropertiesChanged.NotifyPropertyChanged
 {
     public class PropertyChanges<TBindableObject, TProperty> : List<TProperty>, IDisposable where TBindableObject : INotifyPropertyChanged
     {
