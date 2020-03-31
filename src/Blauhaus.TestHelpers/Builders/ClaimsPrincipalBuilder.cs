@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace Blauhaus.Common.TestHelpers.Builders
+namespace Blauhaus.TestHelpers.Builders
 {
     public class ClaimsPrincipalBuilder
     {

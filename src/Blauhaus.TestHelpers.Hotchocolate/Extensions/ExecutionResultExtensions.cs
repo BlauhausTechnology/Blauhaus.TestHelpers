@@ -9,7 +9,7 @@ using HotChocolate.Execution;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
-namespace Blauhaus.Common.TestHelpers.Hotchocolate.Extensions
+namespace Blauhaus.TestHelpers.Hotchocolate.Extensions
 {
     public static class ExecutionResultExtensions
     {

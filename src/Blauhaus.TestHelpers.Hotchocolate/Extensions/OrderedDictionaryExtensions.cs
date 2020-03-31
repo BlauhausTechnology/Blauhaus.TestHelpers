@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -7,7 +6,7 @@ using Blauhaus.Common.Utils.Extensions;
 using HotChocolate.Execution;
 using NUnit.Framework;
 
-namespace Blauhaus.Common.TestHelpers.Hotchocolate.Extensions
+namespace Blauhaus.TestHelpers.Hotchocolate.Extensions
 {
     public static class OrderedDictionaryExtensions
     {

@@ -1,8 +1,8 @@
 ﻿using System.Net.Http;
-using Blauhaus.Common.TestHelpers.MockBuilders;
+using Blauhaus.TestHelpers.MockBuilders;
 using Moq;
 
-namespace Blauhaus.Common.TestHelpers.Http.MockBuilders
+namespace Blauhaus.TestHelpers.Http.MockBuilders
 {
     public class HttpClientFactoryMockBuilder : BaseMockBuilder<HttpClientFactoryMockBuilder, IHttpClientFactory>
     {

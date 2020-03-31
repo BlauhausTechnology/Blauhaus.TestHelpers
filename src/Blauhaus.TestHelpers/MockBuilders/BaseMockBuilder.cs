@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using AutoFixture;
 using Moq;
 
-namespace Blauhaus.Common.TestHelpers.MockBuilders
+namespace Blauhaus.TestHelpers.MockBuilders
 {
 
     public abstract class BaseMockBuilder<TMockBuilder, TMock> 
