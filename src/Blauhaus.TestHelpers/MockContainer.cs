@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Blauhaus.Common.TestHelpers.MockBuilders;
+using Blauhaus.TestHelpers.MockBuilders;
 
-namespace Blauhaus.Common.TestHelpers
+namespace Blauhaus.TestHelpers
 {
     public class MockContainer
     {

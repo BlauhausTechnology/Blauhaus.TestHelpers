@@ -5,7 +5,7 @@ using Blauhaus.Common.Utils.Extensions;
 using HotChocolate.Execution;
 using NUnit.Framework;
 
-namespace Blauhaus.Common.TestHelpers.Hotchocolate.Extensions
+namespace Blauhaus.TestHelpers.Hotchocolate.Extensions
 {
     public static class ObjectListExtensions
     {

@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using Blauhaus.Common.Utils.Extensions;
+﻿using System.Linq;
 using HotChocolate.Execution;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
-namespace Blauhaus.Common.TestHelpers.Hotchocolate.Extensions
+namespace Blauhaus.TestHelpers.Hotchocolate.Extensions
 {
     public static class ExecutionResultErrorExtensions
     {

@@ -2,7 +2,7 @@
 using System.Linq;
 using HotChocolate.Execution;
 
-namespace Blauhaus.Common.TestHelpers.Hotchocolate.Extensions
+namespace Blauhaus.TestHelpers.Hotchocolate.Extensions
 {
     public static class ObjectExtensions
     {

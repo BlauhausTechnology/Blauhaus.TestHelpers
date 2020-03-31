@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace Blauhaus.Common.TestHelpers.PropertiesChanged.CanExecuteChanged
+namespace Blauhaus.TestHelpers.PropertiesChanged.CanExecuteChanged
 {
     public static class CommandExtensions
     {

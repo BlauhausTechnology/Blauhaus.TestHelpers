@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace Blauhaus.Common.TestHelpers.PropertiesChanged.CanExecuteChanged
+namespace Blauhaus.TestHelpers.PropertiesChanged.CanExecuteChanged
 {
     public class CanExecuteChanges<TCommand> : List<bool>, IDisposable where TCommand : ICommand
     {

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Blauhaus.Common.Utils.Extensions;
 using HotChocolate.Execution;
-using HotChocolate.Types.Relay;
 
-namespace Blauhaus.Common.TestHelpers.Hotchocolate.Extensions
+namespace Blauhaus.TestHelpers.Hotchocolate.Extensions
 {
 
     public class Edge
