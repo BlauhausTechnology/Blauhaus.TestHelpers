@@ -78,7 +78,7 @@ namespace Blauhaus.Common.TestHelpers.Hotchocolate.Extensions
             var result = (ReadOnlyQueryResult) executionResult;
             
             using var stream = new MemoryStream();
-            
+             
             var resultSerializer = new JsonQueryResultSerializer();
             resultSerializer.SerializeAsync(
                 result, stream);
