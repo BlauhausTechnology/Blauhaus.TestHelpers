@@ -2,10 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq.Expressions;
+using System.Threading;
 using Blauhaus.Common.Utils.Extensions;
 
 namespace Blauhaus.TestHelpers.PropertiesChanged.NotifyPropertyChanged
 {
+    /// <summary>
+    /// Subscribes to PropertyChanged event handler on any object that implements INotifyPropertyChanged
+    /// </summary>
+    /// <returns>
+    /// A disposable that will unsubscribe from the PropertyChanged event when disposed
+    /// </returns>
     public class PropertyChanges<TBindableObject, TProperty> : List<TProperty>, IDisposable where TBindableObject : INotifyPropertyChanged
     {
         private readonly INotifyPropertyChanged _bindableObject;
@@ -28,22 +35,31 @@ namespace Blauhaus.TestHelpers.PropertiesChanged.NotifyPropertyChanged
             }
         }
         
+        /// <summary>
+        /// Unsubscribes from the PropertyChanged event
+        /// </summary>
         public void Dispose()
         {
             _bindableObject.PropertyChanged -= BindableObject_PropertyChanged;
         }
-
+        /// <summary>
+        ///  Subscribes to PropertyChanged event handler on any object that implements INotifyPropertyChanged and keeps track of the values
+        /// of the specified property each time the value changes. 
+        /// </summary>
         public static PropertyChanges<TBindableObject, TProperty>  Subscribe(TBindableObject bindableObject, Expression<Func<TBindableObject, TProperty>> propertyFunc)
         {
             return new PropertyChanges<TBindableObject, TProperty>(bindableObject, propertyFunc);
         }
 
-        public void WaitForChangeCount(int requiredCount)
+        /// <summary>
+        /// Wait until the specified number of property changes is received, or timeout
+        /// </summary>
+        /// <param name="requiredCount">Number of changes required</param>
+        /// <param name="timeoutMs">Milliseconds after which to return regardless of number of property changes</param>
+        public PropertyChanges<TBindableObject, TProperty> WaitForChangeCount(int requiredCount, int timeoutMs = 1000)
         {
-            while (Count < requiredCount)
-            {
-                //Wait...
-            }
+            SpinWait.SpinUntil(() => Count >= requiredCount, TimeSpan.FromMilliseconds(timeoutMs));
+            return this;
         }
     }
 
