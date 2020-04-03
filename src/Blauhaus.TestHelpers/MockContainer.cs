@@ -25,6 +25,22 @@ namespace Blauhaus.TestHelpers
             };
 
         }
+        public Func<MockBuilder<T>> AddMock<T>() 
+            where T : class
+        {
+            var mockName = typeof(T).Name;
+
+            return () =>
+            {
+                if (!_mocks.ContainsKey(mockName))
+                {
+                    _mocks[mockName] = new MockBuilder<T>();
+                }
+
+                return (MockBuilder<T>) _mocks[mockName];
+            };
+
+        }
 
         public void Clear()
         {

@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Blauhaus.TestHelpers.BaseTests
 {
-    public class BaseServiceTest<TSut> : BaseUnitTest<TSut> where TSut : class
+    public abstract class BaseServiceTest<TSut> : BaseUnitTest<TSut> where TSut : class
     {
         protected IServiceCollection Services;
 
