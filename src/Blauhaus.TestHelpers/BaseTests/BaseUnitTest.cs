@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 
-namespace Blauhaus.TestHelpers
+namespace Blauhaus.TestHelpers.BaseTests
 {
     public abstract class BaseUnitTest<TSut> where TSut : class
     {
@@ -15,7 +15,7 @@ namespace Blauhaus.TestHelpers
         protected abstract TSut ConstructSut();
 
 
-        protected void Cleanup()
+        protected virtual void Cleanup()
         {
             _sut = null;
             _fixture = null;
