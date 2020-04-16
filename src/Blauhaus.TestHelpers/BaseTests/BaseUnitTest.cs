@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using System.Threading;
+using AutoFixture;
 
 namespace Blauhaus.TestHelpers.BaseTests
 {
@@ -6,6 +7,9 @@ namespace Blauhaus.TestHelpers.BaseTests
     {
         protected IFixture MyFixture => _fixture ??= new Fixture();
         private IFixture _fixture;
+
+        protected CancellationToken CancellationToken => _cancellationTokenSource.Token;
+        private CancellationTokenSource _cancellationTokenSource;
 
         protected MockContainer Mocks => _mocks ??= new MockContainer();
         private MockContainer _mocks;
@@ -20,6 +24,7 @@ namespace Blauhaus.TestHelpers.BaseTests
             _sut = null;
             _fixture = null;
             _mocks?.Clear();
+            _cancellationTokenSource = new CancellationTokenSource();
         }
     }
 }
