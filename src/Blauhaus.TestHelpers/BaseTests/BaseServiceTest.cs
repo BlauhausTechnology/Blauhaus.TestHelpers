@@ -17,6 +17,7 @@ namespace Blauhaus.TestHelpers.BaseTests
         {
             base.Cleanup();
             Services = new ServiceCollection();
+            Services.AddSingleton<TSut>();
         }
     }
 }
