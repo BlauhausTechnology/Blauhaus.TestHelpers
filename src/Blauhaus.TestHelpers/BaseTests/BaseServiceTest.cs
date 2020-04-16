@@ -9,6 +9,7 @@ namespace Blauhaus.TestHelpers.BaseTests
 
         protected override TSut ConstructSut()
         {
+            Services.AddSingleton<TSut>();
             return Services.BuildServiceProvider().GetRequiredService<TSut>();
         }
 
