@@ -1,5 +1,8 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using AutoFixture;
+using Blauhaus.TestHelpers.MockBuilders;
+using Moq;
 
 namespace Blauhaus.TestHelpers.BaseTests
 {
@@ -13,6 +16,10 @@ namespace Blauhaus.TestHelpers.BaseTests
 
         protected MockContainer Mocks => _mocks ??= new MockContainer();
         private MockContainer _mocks;
+
+        protected Func<TBuilder> AddMock<TBuilder, TMock>()
+            where TMock : class
+            where TBuilder : BaseMockBuilder<TBuilder, TMock>, new() => Mocks.AddMock<TBuilder, TMock>();
 
         private TSut _sut;
         protected TSut Sut => _sut ??= ConstructSut();
