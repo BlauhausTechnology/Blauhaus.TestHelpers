@@ -19,7 +19,11 @@ namespace Blauhaus.TestHelpers.BaseTests
 
         protected Func<TBuilder> AddMock<TBuilder, TMock>()
             where TMock : class
-            where TBuilder : BaseMockBuilder<TBuilder, TMock>, new() => Mocks.AddMock<TBuilder, TMock>();
+            where TBuilder : BaseMockBuilder<TBuilder, TMock>, new() 
+                => Mocks.AddMock<TBuilder, TMock>();
+
+        protected Func<MockBuilder<TMock>> AddMock<TMock>() where TMock : class
+            => AddMock<MockBuilder<TMock>, TMock>();
 
         private TSut _sut;
         protected TSut Sut => _sut ??= ConstructSut();
