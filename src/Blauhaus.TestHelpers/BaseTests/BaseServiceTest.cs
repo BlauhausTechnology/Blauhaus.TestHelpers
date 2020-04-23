@@ -7,12 +7,21 @@ namespace Blauhaus.TestHelpers.BaseTests
     {
         protected IServiceCollection Services;
 
+        protected void AddService<T>(Func<IServiceProvider, T> func) where T : class
+        {
+            Services.AddSingleton<T>(func);
+        }
+
+        protected  void AddService<T>(T service) where T : class
+        {
+            Services.AddSingleton<T>(service);
+        }
+
         protected override TSut ConstructSut()
         {
             Services.AddSingleton<TSut>();
             return Services.BuildServiceProvider().GetRequiredService<TSut>();
         }
-
 
         protected override void Cleanup()
         {
