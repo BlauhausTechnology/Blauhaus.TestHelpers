@@ -17,12 +17,12 @@ namespace Blauhaus.TestHelpers.BaseTests
         protected MockContainer Mocks => _mocks ??= new MockContainer();
         private MockContainer _mocks;
 
-        protected Func<TBuilder> AddMock<TBuilder, TMock>()
+        public Func<TBuilder> AddMock<TBuilder, TMock>()
             where TMock : class
             where TBuilder : BaseMockBuilder<TBuilder, TMock>, new() 
                 => Mocks.AddMock<TBuilder, TMock>();
 
-        protected Func<MockBuilder<TMock>> AddMock<TMock>() where TMock : class
+        public Func<MockBuilder<TMock>> AddMock<TMock>() where TMock : class
             => AddMock<MockBuilder<TMock>, TMock>();
 
         private TSut _sut;
