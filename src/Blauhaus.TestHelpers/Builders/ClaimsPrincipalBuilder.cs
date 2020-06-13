@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
+using Blauhaus.TestHelpers.Builders._Base;
 
 namespace Blauhaus.TestHelpers.Builders
 {
-    public class ClaimsPrincipalBuilder
+    public class ClaimsPrincipalBuilder : BaseBuilder<ClaimsPrincipalBuilder, ClaimsPrincipal>
     {
         private readonly ClaimsPrincipal _claimsPrincipal;
         private string _authSchemeName = string.Empty;
@@ -48,16 +49,19 @@ namespace Blauhaus.TestHelpers.Builders
             return this;
         }
 
-        public ClaimsPrincipal Build()
+        public override ClaimsPrincipal Object
         {
-            var claimsIdentity = string.IsNullOrEmpty(_authSchemeName)
-                ? new ClaimsIdentity()              //IsAuthenticated = false
-                : new ClaimsIdentity("Bearer");     //IsAuthenticated = true
+            get
+            {
+                var claimsIdentity = string.IsNullOrEmpty(_authSchemeName)
+                    ? new ClaimsIdentity()              //IsAuthenticated = false
+                    : new ClaimsIdentity("Bearer");     //IsAuthenticated = true
 
-            claimsIdentity.AddClaims(_claims);
+                claimsIdentity.AddClaims(_claims);
 
-            _claimsPrincipal.AddIdentity(claimsIdentity);
-            return _claimsPrincipal;
+                _claimsPrincipal.AddIdentity(claimsIdentity);
+                return _claimsPrincipal;
+            }
         }
     }
 }
