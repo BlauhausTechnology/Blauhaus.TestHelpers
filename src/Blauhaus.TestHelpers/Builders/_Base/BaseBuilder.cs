@@ -7,7 +7,7 @@ using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 namespace Blauhaus.TestHelpers.Builders._Base
 {
     public abstract class BaseBuilder<TBuilder, T> : IBuilder<TBuilder, T>
-        where TBuilder :  BaseBuilder<TBuilder, T>
+        where TBuilder :  BaseBuilder<TBuilder, T>, new()
     {
 
         protected readonly IFixture MyFixture;
@@ -26,6 +26,8 @@ namespace Blauhaus.TestHelpers.Builders._Base
         }
 
         public virtual T Object => _fixture.Create();
+        
+        public static T Default => Activator.CreateInstance<TBuilder>().Object;
         
     }
 }

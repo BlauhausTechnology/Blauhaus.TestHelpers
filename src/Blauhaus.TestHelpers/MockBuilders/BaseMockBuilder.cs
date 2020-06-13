@@ -19,6 +19,7 @@ namespace Blauhaus.TestHelpers.MockBuilders
         public readonly Mock<TMock> Mock = new Mock<TMock>();
         public TMock Object => Mock.Object;
         public List<TMock> ToList => new List<TMock>{Mock.Object};
+        public static TMock Default => Activator.CreateInstance<TMockBuilder>().Object;
 
         public TMockBuilder With<TProperty>(Expression<Func<TMock, TProperty>> expression, TProperty value)
         {

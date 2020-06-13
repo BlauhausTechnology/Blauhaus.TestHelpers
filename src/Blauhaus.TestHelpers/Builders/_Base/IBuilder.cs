@@ -7,5 +7,6 @@ namespace Blauhaus.TestHelpers.Builders._Base
     {
         TBuilder With<TProperty>(Expression<Func<T, TProperty>> expression, TProperty value);
         T Object { get; }
+
     }
 }
