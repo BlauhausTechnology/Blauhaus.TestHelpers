@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using AutoFixture;
+using Blauhaus.TestHelpers.Builders._Base;
 using Moq;
 
 namespace Blauhaus.TestHelpers.MockBuilders
 {
 
-    public abstract class BaseMockBuilder<TMockBuilder, TMock> 
+    public abstract class BaseMockBuilder<TMockBuilder, TMock> : IBuilder<TMockBuilder, TMock>
         where TMockBuilder : BaseMockBuilder<TMockBuilder, TMock>
         where TMock : class
     {
