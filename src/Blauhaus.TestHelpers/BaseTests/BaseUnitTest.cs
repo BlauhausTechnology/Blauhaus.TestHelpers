@@ -11,7 +11,7 @@ namespace Blauhaus.TestHelpers.BaseTests
         protected IFixture MyFixture => _fixture ??= new Fixture();
         private IFixture _fixture;
 
-        protected CancellationToken CancellationToken => _cancellationTokenSource.Token;
+        protected CancellationToken CancelToken => _cancellationTokenSource.Token;
         private CancellationTokenSource _cancellationTokenSource;
 
         protected MockContainer Mocks => _mocks ??= new MockContainer();
