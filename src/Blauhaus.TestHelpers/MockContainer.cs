@@ -8,36 +8,48 @@ namespace Blauhaus.TestHelpers
     {
         private readonly Dictionary<string, object> _mocks = new Dictionary<string, object>();
 
-        public Func<TMockBuilder> AddMock<TMockBuilder, T>() 
+        /// <summary>
+        /// Adds specific mockbuilder to the mock container. Provide a unique name if MockBuilder may have the same Type name as another - eg when using generics
+        /// </summary>
+        public Func<TMockBuilder> AddMock<TMockBuilder, T>(string mockUniqueName = "") 
             where TMockBuilder : BaseMockBuilder<TMockBuilder, T>, new() 
             where T : class
         {
-            var mockName = typeof(T).Name;
+            if (string.IsNullOrEmpty(mockUniqueName))
+            {
+                mockUniqueName = typeof(T).Name;
+            }
 
             return () =>
             {
-                if (!_mocks.ContainsKey(mockName))
+                if (!_mocks.ContainsKey(mockUniqueName))
                 {
-                    _mocks[mockName] = new TMockBuilder();
+                    _mocks[mockUniqueName] = new TMockBuilder();
                 }
 
-                return (TMockBuilder) _mocks[mockName];
+                return (TMockBuilder) _mocks[mockUniqueName];
             };
 
         }
-        public Func<MockBuilder<T>> AddMock<T>() 
+        /// <summary>
+        /// Adds specific mockbuilder to the mock container. Provide a unique name if MockBuilder may have the same Type name as another - eg when using generics
+        /// </summary>
+        public Func<MockBuilder<T>> AddMock<T>(string mockUniqueName = "") 
             where T : class
         {
-            var mockName = typeof(T).Name;
+            if (string.IsNullOrEmpty(mockUniqueName))
+            {
+                mockUniqueName = typeof(T).Name;
+            }
 
             return () =>
             {
-                if (!_mocks.ContainsKey(mockName))
+                if (!_mocks.ContainsKey(mockUniqueName))
                 {
-                    _mocks[mockName] = new MockBuilder<T>();
+                    _mocks[mockUniqueName] = new MockBuilder<T>();
                 }
 
-                return (MockBuilder<T>) _mocks[mockName];
+                return (MockBuilder<T>) _mocks[mockUniqueName];
             };
 
         }
