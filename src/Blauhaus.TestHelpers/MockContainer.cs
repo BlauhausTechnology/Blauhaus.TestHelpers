@@ -6,38 +6,34 @@ namespace Blauhaus.TestHelpers
 {
     public class MockContainer
     {
-        private readonly Dictionary<string, object> _mocks = new Dictionary<string, object>();
+        private readonly Dictionary<Type, object> _mocks = new Dictionary<Type, object>();
 
         public Func<TMockBuilder> AddMock<TMockBuilder, T>() 
             where TMockBuilder : BaseMockBuilder<TMockBuilder, T>, new() 
             where T : class
         {
-            var mockName = typeof(T).Name;
-
             return () =>
             {
-                if (!_mocks.ContainsKey(mockName))
+                if (!_mocks.ContainsKey(typeof(T)))
                 {
-                    _mocks[mockName] = new TMockBuilder();
+                    _mocks[typeof(T)] = new TMockBuilder();
                 }
 
-                return (TMockBuilder) _mocks[mockName];
+                return (TMockBuilder) _mocks[typeof(T)];
             };
 
         }
         public Func<MockBuilder<T>> AddMock<T>() 
             where T : class
         {
-            var mockName = typeof(T).Name;
-
             return () =>
             {
-                if (!_mocks.ContainsKey(mockName))
+                if (!_mocks.ContainsKey(typeof(T)))
                 {
-                    _mocks[mockName] = new MockBuilder<T>();
+                    _mocks[typeof(T)] = new MockBuilder<T>();
                 }
 
-                return (MockBuilder<T>) _mocks[mockName];
+                return (MockBuilder<T>) _mocks[typeof(T)];
             };
 
         }

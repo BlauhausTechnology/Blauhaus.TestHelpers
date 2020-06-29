@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using Blauhaus.Common.Utils.Extensions;
 
-namespace Blauhaus.TestHelpers.PropertiesChanged.NotifyPropertyChanged
+namespace Blauhaus.TestHelpers.PropertiesChanged.PropertiesChanged
 {
     /// <summary>
     /// Subscribes to PropertyChanged event handler on any object that implements INotifyPropertyChanged

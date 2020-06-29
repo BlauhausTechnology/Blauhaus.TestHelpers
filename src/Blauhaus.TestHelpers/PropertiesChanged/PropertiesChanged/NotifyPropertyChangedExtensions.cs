@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq.Expressions;
 
-namespace Blauhaus.TestHelpers.PropertiesChanged.NotifyPropertyChanged
+namespace Blauhaus.TestHelpers.PropertiesChanged.PropertiesChanged
 {
     public static class NotifyPropertyChangedExtensions
     {
@@ -11,5 +11,6 @@ namespace Blauhaus.TestHelpers.PropertiesChanged.NotifyPropertyChanged
         {
             return new PropertyChanges<TBindableObject, TProperty>(bindableObject, propertyFunc);
         }
+         
     }
 }
