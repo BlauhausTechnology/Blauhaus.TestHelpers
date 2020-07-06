@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection.Emit;
 using System.Security.Claims;
 using Blauhaus.TestHelpers.Builders._Base;
 
@@ -49,19 +50,17 @@ namespace Blauhaus.TestHelpers.Builders
             return this;
         }
 
-        public override ClaimsPrincipal Object
+        protected override ClaimsPrincipal Construct()
         {
-            get
-            {
-                var claimsIdentity = string.IsNullOrEmpty(_authSchemeName)
-                    ? new ClaimsIdentity()              //IsAuthenticated = false
-                    : new ClaimsIdentity("Bearer");     //IsAuthenticated = true
+            var claimsIdentity = string.IsNullOrEmpty(_authSchemeName)
+                ? new ClaimsIdentity()              //IsAuthenticated = false
+                : new ClaimsIdentity("Bearer");     //IsAuthenticated = true
 
-                claimsIdentity.AddClaims(_claims);
+            claimsIdentity.AddClaims(_claims);
 
-                _claimsPrincipal.AddIdentity(claimsIdentity);
-                return _claimsPrincipal;
-            }
+            _claimsPrincipal.AddIdentity(claimsIdentity);
+            return _claimsPrincipal;
         }
+         
     }
 }
