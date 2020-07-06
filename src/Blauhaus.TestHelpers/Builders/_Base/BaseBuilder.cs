@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
-using AutoFixture;
-using AutoFixture.Dsl;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+using System.Reflection;
 
 namespace Blauhaus.TestHelpers.Builders._Base
 {
@@ -10,25 +10,51 @@ namespace Blauhaus.TestHelpers.Builders._Base
         where TBuilder :  BaseBuilder<TBuilder, T>
     {
 
-        private readonly ICustomizationComposer<T> _fixture;
         private Random _random;
-        
-        protected Random Random => _random ??= new Random(); 
-        protected readonly IFixture MyFixture;
+        private PropertyInfo[] _properties;
+        private T _object;
+
+
+        protected Random Random => 
+            _random ??= new Random(); 
+
+        protected IEnumerable<PropertyInfo> Properties => 
+            _properties ??= typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+         
 
         protected BaseBuilder()
         {
-            MyFixture = new Fixture();
-            _fixture = MyFixture.Build<T>();
         }
 
         public TBuilder With<TProperty>(Expression<Func<T, TProperty>> expression, TProperty value)
         {
-            _fixture.With<TProperty>(expression);
+            var propertyName = (expression.Body as MemberExpression)?.Member.Name;
+            var propertyToSet = Properties.FirstOrDefault(property => property.Name == propertyName);
+
+            if (propertyToSet != null)
+            {
+                propertyToSet.SetValue(Object, value);
+            }
             return this as TBuilder;
         }
 
-        public virtual T Object => _fixture.Create();
+
+        public T Object
+        {
+            get
+            {
+                if (_object == null)
+                {
+                    _object = Construct();
+                }
+                return _object;
+            } 
+        }
+
+        protected virtual T Construct()
+        {
+            return (T)Activator.CreateInstance(typeof(T));
+        } 
 
         public static T Default => Activator.CreateInstance<TBuilder>().Object;
         
