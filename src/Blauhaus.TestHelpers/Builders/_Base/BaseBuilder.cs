@@ -12,13 +12,13 @@ namespace Blauhaus.TestHelpers.Builders._Base
 
         private readonly ICustomizationComposer<T> _fixture;
         private T _object;
-        private Random _random;
-        
-        protected Random Random => _random ??= new Random(); 
+
+        protected Random Random;
         protected readonly IFixture MyFixture;
 
         protected BaseBuilder()
         {
+            Random = new Random();
             MyFixture = new Fixture();
             _fixture = MyFixture.Build<T>();
         }
