@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Blauhaus.TestHelpers.Builders._Base;
 using Blauhaus.TestHelpers.MockBuilders;
 
 namespace Blauhaus.TestHelpers
@@ -9,7 +10,7 @@ namespace Blauhaus.TestHelpers
         private readonly Dictionary<Type, object> _mocks = new Dictionary<Type, object>();
 
         public Func<TMockBuilder> AddMock<TMockBuilder, T>() 
-            where TMockBuilder : BaseMockBuilder<TMockBuilder, T>, new() 
+            where TMockBuilder : IBuilder<TMockBuilder, T>, new() 
             where T : class
         {
             return () =>
