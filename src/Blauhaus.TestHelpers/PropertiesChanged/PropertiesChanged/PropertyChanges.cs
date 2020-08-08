@@ -58,7 +58,25 @@ namespace Blauhaus.TestHelpers.PropertiesChanged.PropertiesChanged
         /// <param name="timeoutMs">Milliseconds after which to return regardless of number of property changes</param>
         public PropertyChanges<TBindableObject, TProperty> WaitForChangeCount(int requiredCount, int timeoutMs = 1000)
         {
-            SpinWait.SpinUntil(() => Count >= requiredCount, TimeSpan.FromMilliseconds(timeoutMs));
+            WaitForChanges(x => x.Count >= requiredCount, timeoutMs);
+            return this;
+        }
+
+        /// <summary>
+        /// Wait until the specified number of property changes is received, or timeout
+        /// </summary>
+        /// <param name="predicate">Matching condition to wait for on this PropertyChanges object</param>
+        /// <param name="timeoutMs">Milliseconds after which to return regardless of number of property changes</param>
+        public PropertyChanges<TBindableObject, TProperty> WaitForChanges(Expression<Func<PropertyChanges<TBindableObject, TProperty>, bool>> predicate, int timeoutMs = 1000)
+        {
+            var startMs = DateTime.UtcNow.Ticks/10000;
+            while (!predicate.Compile().Invoke(this))
+            {
+                if (DateTime.UtcNow.Ticks/10000 - startMs >= timeoutMs)
+                {
+                    break;
+                }
+            }
             return this;
         }
     }
