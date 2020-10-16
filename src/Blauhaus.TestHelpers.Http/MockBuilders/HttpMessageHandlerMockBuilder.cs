@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using Moq.Protected;
-using Newtonsoft.Json;
 
 namespace Blauhaus.TestHelpers.Http.MockBuilders
 {
@@ -16,6 +18,7 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
          private HttpStatusCode _code = HttpStatusCode.Accepted;
         private string _content = string.Empty;
         private string _reasonPhrase;
+        private Exception? _exception;
 
         public HttpMessageHandlerMockBuilder()
         {
@@ -24,14 +27,52 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
                 .ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.Accepted,
-                    Content = new StringContent(JsonConvert.SerializeObject(""))
+                    Content = new StringContent(JsonSerializer.Serialize(""))
                 })
                 .Verifiable();
+        }
+        
+        public HttpMessageHandlerMockBuilder Build()
+        {
+            var response = new HttpResponseMessage
+            {
+                ReasonPhrase = _reasonPhrase,
+                StatusCode = _code,
+                Content = new StringContent(_content),
+            };
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            if (_exception != null)
+            {
+                this.Protected()
+                    .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                    .ThrowsAsync(_exception)
+                    .Verifiable();
+            }
+            else
+            {
+                this.Protected()
+                    .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                    .Callback<HttpRequestMessage, CancellationToken>(async (m, c) =>
+                    {
+                        Debug.WriteLine(await m.Content.ReadAsStringAsync());
+                    })
+                    .ReturnsAsync(response)
+                    .Verifiable();
+            }
+
+            return this;
         }
 
         public HttpMessageHandlerMockBuilder Where_SendAsync_returns_StatusCode(HttpStatusCode code)
         {
             _code = code;
+            return this;
+        }
+
+        public HttpMessageHandlerMockBuilder Where_SendAsync_throws(Exception e)
+        {
+            _exception = e;
             return this;
         }
 
@@ -44,24 +85,6 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
         public HttpMessageHandlerMockBuilder Where_SendAsync_returns_ReasonPhrase(string value)
         {
             _reasonPhrase = value;
-            return this;
-        }
-
-        public HttpMessageHandlerMockBuilder Build()
-        {
-            var response = new HttpResponseMessage
-            {
-                ReasonPhrase = _reasonPhrase,
-                StatusCode = _code,
-                Content = new StringContent(_content),
-            };
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            this.Protected()
-                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(response)
-                .Verifiable();
-
             return this;
         }
 
@@ -84,10 +107,10 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
         {
             this.Protected()
                 .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Once(),
-                    ItExpr.Is<HttpRequestMessage>(y => y.Content.ReadAsStringAsync().Result.Contains(content)),
+                    ItExpr.Is<HttpRequestMessage>(y => string.Equals(y.Content.ReadAsStringAsync().Result, content, StringComparison.InvariantCultureIgnoreCase)),
                     ItExpr.IsAny<CancellationToken>());
         }
-
+         
         public void VerifyHeader(string key, string value, int times = 1)
         {
             this.Protected()
