@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -48,15 +49,17 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
 
         public HttpMessageHandlerMockBuilder Build()
         {
+            var response = new HttpResponseMessage
+            {
+                ReasonPhrase = _reasonPhrase,
+                StatusCode = _code,
+                Content = new StringContent(_content),
+            };
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             this.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(new HttpResponseMessage
-                {
-                    ReasonPhrase = _reasonPhrase,
-                    StatusCode = _code,
-                    Content = new StringContent(_content)
-                })
+                .ReturnsAsync(response)
                 .Verifiable();
 
             return this;
