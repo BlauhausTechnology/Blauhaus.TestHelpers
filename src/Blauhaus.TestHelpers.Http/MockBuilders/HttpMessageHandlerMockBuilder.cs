@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -15,10 +16,11 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
 {
     public class HttpMessageHandlerMockBuilder : Mock<HttpMessageHandler>
     {
-         private HttpStatusCode _code = HttpStatusCode.Accepted;
+        private HttpStatusCode _code = HttpStatusCode.Accepted;
         private string _content = string.Empty;
         private string _reasonPhrase;
         private Exception? _exception;
+        private Dictionary<string, string> _headers = new Dictionary<string, string>();
 
         public HttpMessageHandlerMockBuilder()
         {
@@ -40,7 +42,13 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
                 StatusCode = _code,
                 Content = new StringContent(_content),
             };
+
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            foreach (var header in _headers)
+            {
+                response.Content.Headers.Add(header.Key, new List<string>{header.Value});
+            }
 
             if (_exception != null)
             {
@@ -85,6 +93,17 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
         public HttpMessageHandlerMockBuilder Where_SendAsync_returns_ReasonPhrase(string value)
         {
             _reasonPhrase = value;
+            return this;
+        }
+        
+        public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Headers(Dictionary<string, string> headers)
+        {
+            _headers = headers;
+            return this;
+        }
+        public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Header(string key, string value)
+        {
+            _headers[key] = value;
             return this;
         }
 
