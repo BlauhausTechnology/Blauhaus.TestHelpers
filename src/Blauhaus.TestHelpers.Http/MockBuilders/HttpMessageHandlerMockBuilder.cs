@@ -21,6 +21,7 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
         private string _reasonPhrase;
         private Exception? _exception;
         private Dictionary<string, string> _headers = new Dictionary<string, string>();
+        private List<HttpResponseMessage>? _responses;
 
         public HttpMessageHandlerMockBuilder()
         {
@@ -36,37 +37,47 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
         
         public HttpMessageHandlerMockBuilder Build()
         {
-            var response = new HttpResponseMessage
-            {
-                ReasonPhrase = _reasonPhrase,
-                StatusCode = _code,
-                Content = new StringContent(_content),
-            };
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            foreach (var header in _headers)
+            if (_responses != null)
             {
-                response.Content.Headers.Add(header.Key, new List<string>{header.Value});
-            }
+                var queue = new Queue<HttpResponseMessage>(_responses);
 
-            if (_exception != null)
-            {
                 this.Protected()
                     .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                    .ThrowsAsync(_exception)
+                    .Callback<HttpRequestMessage, CancellationToken>(async (m, c) => { Debug.WriteLine(await m.Content.ReadAsStringAsync()); })
+                    .ReturnsAsync(queue.Dequeue)
                     .Verifiable();
             }
             else
             {
-                this.Protected()
-                    .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                    .Callback<HttpRequestMessage, CancellationToken>(async (m, c) =>
-                    {
-                        Debug.WriteLine(await m.Content.ReadAsStringAsync());
-                    })
-                    .ReturnsAsync(response)
-                    .Verifiable();
+                var response = new HttpResponseMessage
+                {
+                    ReasonPhrase = _reasonPhrase,
+                    StatusCode = _code,
+                    Content = new StringContent(_content),
+                };
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                foreach (var header in _headers)
+                {
+                    response.Content.Headers.Add(header.Key, new List<string> {header.Value});
+                }
+
+                if (_exception != null)
+                {
+                    this.Protected()
+                        .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                        .ThrowsAsync(_exception)
+                        .Verifiable();
+                }
+                else
+                {
+                    this.Protected()
+                        .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                        .Callback<HttpRequestMessage, CancellationToken>(async (m, c) => { Debug.WriteLine(await m.Content.ReadAsStringAsync()); })
+                        .ReturnsAsync(response)
+                        .Verifiable();
+                }
             }
 
             return this;
@@ -83,6 +94,12 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
             _exception = e;
             return this;
         }
+        public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Sequence(List<HttpResponseMessage> responses)
+        {
+            _responses = responses;
+            return this;
+        }
+
 
         public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Content(string content)
         {
