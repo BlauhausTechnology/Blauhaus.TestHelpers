@@ -103,11 +103,27 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
                     ItExpr.IsAny<CancellationToken>());
         }
 
+        public void VerifyUri(Func<string, bool> predicate)
+        {
+            this.Protected()
+                .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Once(),
+                    ItExpr.Is<HttpRequestMessage>(y => predicate.Invoke(y.RequestUri.AbsoluteUri)),
+                    ItExpr.IsAny<CancellationToken>());
+        }
+
         public void VerifyContent(string content)
         {
             this.Protected()
                 .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Once(),
                     ItExpr.Is<HttpRequestMessage>(y => string.Equals(y.Content.ReadAsStringAsync().Result, content, StringComparison.InvariantCultureIgnoreCase)),
+                    ItExpr.IsAny<CancellationToken>());
+        }
+
+        public void VerifyContent(Func<string, bool> predicate)
+        {
+            this.Protected()
+                .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Once(),
+                    ItExpr.Is<HttpRequestMessage>(y => predicate.Invoke(y.Content.ReadAsStringAsync().Result)),
                     ItExpr.IsAny<CancellationToken>());
         }
          
