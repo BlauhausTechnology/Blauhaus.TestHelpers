@@ -60,7 +60,7 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
 
                 foreach (var header in _headers)
                 {
-                    response.Content.Headers.Add(header.Key, new List<string> {header.Value});
+                    response.Headers.Add(header.Key, new List<string> {header.Value});
                 }
 
                 if (_exception != null)
