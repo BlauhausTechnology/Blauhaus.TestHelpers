@@ -16,6 +16,8 @@ namespace Blauhaus.TestHelpers.MockBuilders
         protected IFixture MyFixture => _fixture ??= new Fixture();
         private IFixture _fixture;
 
+        protected TProperty Get<TProperty>() => MyFixture.Create<TProperty>();
+
         public readonly Mock<TMock> Mock = new Mock<TMock>();
         public TMock Object => Mock.Object;
         public List<TMock> ToList => new List<TMock>{Mock.Object};
