@@ -13,6 +13,33 @@ namespace Blauhaus.TestHelpers.MockBuilders
     {
         private readonly List<Func<T, Task>> _handlers = new List<Func<T, Task>>();
 
+        public Mock<IDisposable> Where_SubscribeAsync_publishes_immediately(T update)
+        {
+            var mockToken = new Mock<IDisposable>();
+
+            Mock.Setup(x => x.SubscribeAsync(It.IsAny<Func<T, Task>>()))
+                .Callback((Func<T, Task> handler) =>
+                {
+                    handler.Invoke(update);
+                }).ReturnsAsync(mockToken.Object);
+
+            return mockToken;
+        }
+
+        public Mock<IDisposable> Where_SubscribeAsync_publishes_sequence(IEnumerable<T> updates)
+        {
+            var mockToken = new Mock<IDisposable>();
+            var queue = new Queue<T>(updates);
+
+            Mock.Setup(x => x.SubscribeAsync(It.IsAny<Func<T, Task>>()))
+                .Callback((Func<T, Task> handler) =>
+                {
+                    handler.Invoke(queue.Dequeue());
+                }).ReturnsAsync(mockToken.Object);
+
+            return mockToken;
+        }
+        
         public Mock<IDisposable> AllowMockSubscriptions()
         {
             var mockToken = new Mock<IDisposable>();
@@ -25,7 +52,7 @@ namespace Blauhaus.TestHelpers.MockBuilders
 
             return mockToken;
         }
-        
+
         public async Task PublishMockSubscriptionAsync(T model)
         {
             foreach (var handler in _handlers)
