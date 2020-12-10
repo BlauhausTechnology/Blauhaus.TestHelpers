@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.Threading;
 using AutoFixture;
 using Blauhaus.TestHelpers.MockBuilders;
@@ -37,5 +38,12 @@ namespace Blauhaus.TestHelpers.BaseTests
             _mocks?.Clear();
             _cancellationTokenSource = new CancellationTokenSource();
         }
+
+        
+        protected T Is<T>(Expression<Func<T, bool>> func) => It.Is<T>(func);
+        protected T Any<T>() => It.IsAny<T>();
+        protected  CancellationToken AnyToken => It.IsAny<CancellationToken>();
+        protected string AnyString => It.IsAny<string>();
+
     }
 }
