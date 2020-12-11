@@ -40,10 +40,12 @@ namespace Blauhaus.TestHelpers.BaseTests
         }
 
         
-        protected T Is<T>(Expression<Func<T, bool>> func) => It.Is<T>(func);
-        protected T Any<T>() => It.IsAny<T>();
-        protected  CancellationToken AnyToken => It.IsAny<CancellationToken>();
-        protected string AnyString => It.IsAny<string>();
+        protected T ItIs<T>(Expression<Func<T, bool>> func) => It.Is<T>(func);
+
+        protected T ItIsAny<T>() => It.IsAny<T>();
+        protected  CancellationToken ItIsAnyToken => It.IsAny<CancellationToken>();
+        protected string ItIsAnyString => It.IsAny<string>();
+        protected Guid ItIsAnyGuid => It.IsAny<Guid>();
 
     }
 }
