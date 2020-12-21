@@ -26,7 +26,7 @@ namespace Blauhaus.TestHelpers.Builders._Base
 
             var existingCustomizationForThisProperty = _fixture.Customizations.FirstOrDefault(x =>
                 x is OverridePropertyBuilder<T, TProperty> existingCustomization && 
-                existingCustomization.PropertyInfo == newCustomization.PropertyInfo);
+                existingCustomization.PropertyInfo.Name == newCustomization.PropertyInfo.Name);
 
             if (existingCustomizationForThisProperty != null)
             {

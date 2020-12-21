@@ -6,7 +6,7 @@ namespace Blauhaus.TestHelpers.Extensions
     public static class ObjectExtensions
     {
         /// <summary>
-        /// Returns when the preficate is true or the timeout expires
+        /// Returns when the predicate is true or the timeout expires
         /// </summary>
         public static T WaitFor<T>(this T obj,  Expression<Func<T, bool>> predicate, int timeoutMs = 1000)
         {

@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoFixture" Version="4.14.0" />
+    <PackageReference Include="AutoFixture" Version="4.15.0" />
     <PackageReference Include="Blauhaus.Common.Utils" Version="1.8.7" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
