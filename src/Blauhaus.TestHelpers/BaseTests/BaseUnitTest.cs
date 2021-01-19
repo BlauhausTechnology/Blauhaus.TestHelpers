@@ -7,7 +7,7 @@ using Moq;
 
 namespace Blauhaus.TestHelpers.BaseTests
 {
-    public abstract class BaseUnitTest<TSut> where TSut : class
+    public abstract class BaseUnitTest<TSut> 
     {
         protected IFixture MyFixture => _fixture ??= new Fixture();
         private IFixture _fixture;
@@ -29,23 +29,15 @@ namespace Blauhaus.TestHelpers.BaseTests
         private TSut _sut;
         protected TSut Sut => _sut ??= ConstructSut();
         protected abstract TSut ConstructSut();
-
-
+        
         protected virtual void Cleanup()
         {
-            _sut = null;
+            _sut = default;
             _fixture = null;
             _mocks?.Clear();
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
-        
-        protected T ItIs<T>(Expression<Func<T, bool>> func) => It.Is<T>(func);
-
-        protected T ItIsAny<T>() => It.IsAny<T>();
-        protected  CancellationToken ItIsAnyToken => It.IsAny<CancellationToken>();
-        protected string ItIsAnyString => It.IsAny<string>();
-        protected Guid ItIsAnyGuid => It.IsAny<Guid>();
 
     }
 }
