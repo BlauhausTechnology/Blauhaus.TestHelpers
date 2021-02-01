@@ -18,9 +18,25 @@ namespace Blauhaus.TestHelpers.MockBuilders
             var mockToken = new Mock<IDisposable>();
 
             Mock.Setup(x => x.SubscribeAsync(It.IsAny<Func<T, Task>>()))
-                .Callback((Func<T, Task> handler) =>
+                .Callback(async (Func<T, Task> handler) =>
                 {
-                    handler.Invoke(update);
+                    await handler.Invoke(update);
+                }).ReturnsAsync(mockToken.Object);
+
+            return mockToken;
+        }
+        
+        public Mock<IDisposable> Where_SubscribeAsync_publishes_immediately(IEnumerable<T> updates)
+        {
+            var mockToken = new Mock<IDisposable>();
+
+            Mock.Setup(x => x.SubscribeAsync(It.IsAny<Func<T, Task>>()))
+                .Callback(async (Func<T, Task> handler) =>
+                {
+                    foreach (var update in updates)
+                    {
+                        await handler.Invoke(update);
+                    }
                 }).ReturnsAsync(mockToken.Object);
 
             return mockToken;
