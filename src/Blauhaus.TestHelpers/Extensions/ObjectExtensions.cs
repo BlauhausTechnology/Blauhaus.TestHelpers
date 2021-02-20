@@ -20,5 +20,14 @@ namespace Blauhaus.TestHelpers.Extensions
             }
             return obj;
         }
+
+        public static T AssertNotNull<T>(this T thing)
+        {
+            if (thing is null)
+                throw new Exception($"Object of type {typeof(T).Name} was null, contrary to expectations");
+
+            return thing;
+        }
+
     }
 }
