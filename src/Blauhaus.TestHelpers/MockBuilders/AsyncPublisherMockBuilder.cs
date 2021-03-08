@@ -13,6 +13,16 @@ namespace Blauhaus.TestHelpers.MockBuilders
     {
         private readonly List<Func<T, Task>> _handlers = new List<Func<T, Task>>();
 
+        public Mock<IDisposable> Where_SubscribeAsync_returns_token()
+        {
+            var mockToken = new Mock<IDisposable>();
+            
+            Mock.Setup(x => x.SubscribeAsync(It.IsAny<Func<T, Task>>()))
+                .ReturnsAsync(mockToken.Object);
+            
+            return mockToken;
+        }
+
         public Mock<IDisposable> Where_SubscribeAsync_publishes_immediately(T update)
         {
             var mockToken = new Mock<IDisposable>();
