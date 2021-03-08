@@ -20,6 +20,7 @@ namespace Blauhaus.TestHelpers.MockBuilders
             Mock.Setup(x => x.SubscribeAsync(It.IsAny<Func<T, Task>>()))
                 .Callback(async (Func<T, Task> handler) =>
                 {
+                    _handlers.Add(handler);
                     await handler.Invoke(update);
                 }).ReturnsAsync(mockToken.Object);
 
@@ -33,6 +34,7 @@ namespace Blauhaus.TestHelpers.MockBuilders
             Mock.Setup(x => x.SubscribeAsync(It.IsAny<Func<T, Task>>()))
                 .Callback(async (Func<T, Task> handler) =>
                 {
+                    _handlers.Add(handler);
                     foreach (var update in updates)
                     {
                         await handler.Invoke(update);
@@ -50,24 +52,13 @@ namespace Blauhaus.TestHelpers.MockBuilders
             Mock.Setup(x => x.SubscribeAsync(It.IsAny<Func<T, Task>>()))
                 .Callback((Func<T, Task> handler) =>
                 {
+                    _handlers.Add(handler);
                     handler.Invoke(queue.Dequeue());
                 }).ReturnsAsync(mockToken.Object);
 
             return mockToken;
         }
-        
-        public Mock<IDisposable> AllowMockSubscriptions()
-        {
-            var mockToken = new Mock<IDisposable>();
-
-            Mock.Setup(x => x.SubscribeAsync(It.IsAny<Func<T, Task>>()))
-                .Callback((Func<T, Task> handler) =>
-                {
-                    _handlers.Add(handler);
-                }).ReturnsAsync(mockToken.Object);
-
-            return mockToken;
-        }
+         
 
         public async Task PublishMockSubscriptionAsync(T model)
         {
