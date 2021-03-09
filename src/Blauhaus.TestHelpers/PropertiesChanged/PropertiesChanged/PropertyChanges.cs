@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Threading;
 using Blauhaus.Common.Utils.Extensions;
+using Blauhaus.TestHelpers.Extensions;
 
 namespace Blauhaus.TestHelpers.PropertiesChanged.PropertiesChanged
 {
@@ -69,15 +70,7 @@ namespace Blauhaus.TestHelpers.PropertiesChanged.PropertiesChanged
         /// <param name="timeoutMs">Milliseconds after which to return regardless of number of property changes</param>
         public PropertyChanges<TBindableObject, TProperty> WaitForChanges(Expression<Func<PropertyChanges<TBindableObject, TProperty>, bool>> predicate, int timeoutMs = 1000)
         {
-            var startMs = DateTime.UtcNow.Ticks/10000;
-            while (!predicate.Compile().Invoke(this))
-            {
-                if (DateTime.UtcNow.Ticks/10000 - startMs >= timeoutMs)
-                {
-                    break;
-                }
-            }
-            return this;
+            return this.WaitFor(predicate, timeoutMs); 
         }
     }
 
