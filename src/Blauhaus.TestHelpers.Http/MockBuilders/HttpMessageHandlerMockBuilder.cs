@@ -54,7 +54,7 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
                 {
                     ReasonPhrase = _reasonPhrase,
                     StatusCode = _code,
-                    Content = new StringContent(_content),
+                    Content = new StringContent(_content)
                 };
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 

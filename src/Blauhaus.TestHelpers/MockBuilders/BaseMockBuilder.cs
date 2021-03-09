@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading;
 using AutoFixture;
 using Blauhaus.TestHelpers.Builders._Base;
 using Moq;
@@ -28,5 +29,12 @@ namespace Blauhaus.TestHelpers.MockBuilders
             Mock.Setup(expression).Returns(value);
             return this as TMockBuilder;
         }
+
+        protected T Is<T>(Expression<Func<T, bool>> func) => It.Is(func);
+        protected string IsString(Expression<Func<string, bool>> func) => It.Is(func);
+
+        protected T Any<T>() => It.IsAny<T>();
+        protected  CancellationToken AnyToken => It.IsAny<CancellationToken>();
+        protected string AnyString => It.IsAny<string>();
     }
 }

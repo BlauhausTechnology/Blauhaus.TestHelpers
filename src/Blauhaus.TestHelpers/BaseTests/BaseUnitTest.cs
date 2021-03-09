@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.Threading;
 using AutoFixture;
 using Blauhaus.TestHelpers.MockBuilders;
@@ -6,7 +7,7 @@ using Moq;
 
 namespace Blauhaus.TestHelpers.BaseTests
 {
-    public abstract class BaseUnitTest<TSut> where TSut : class
+    public abstract class BaseUnitTest<TSut> 
     {
         protected IFixture MyFixture => _fixture ??= new Fixture();
         private IFixture _fixture;
@@ -28,14 +29,15 @@ namespace Blauhaus.TestHelpers.BaseTests
         private TSut _sut;
         protected TSut Sut => _sut ??= ConstructSut();
         protected abstract TSut ConstructSut();
-
-
+        
         protected virtual void Cleanup()
         {
-            _sut = null;
+            _sut = default;
             _fixture = null;
             _mocks?.Clear();
             _cancellationTokenSource = new CancellationTokenSource();
         }
+
+
     }
 }
