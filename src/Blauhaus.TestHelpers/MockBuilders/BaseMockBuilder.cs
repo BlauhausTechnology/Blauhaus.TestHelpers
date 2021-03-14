@@ -27,7 +27,7 @@ namespace Blauhaus.TestHelpers.MockBuilders
         public TMockBuilder With<TProperty>(Expression<Func<TMock, TProperty>> expression, TProperty value)
         {
             Mock.Setup(expression).Returns(value);
-            return this as TMockBuilder;
+            return (TMockBuilder) this;
         }
 
         protected T Is<T>(Expression<Func<T, bool>> func) => It.Is(func);
