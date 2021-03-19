@@ -28,6 +28,7 @@ namespace Blauhaus.TestHelpers.BaseTests
 
         private TSut _sut;
         protected TSut Sut => _sut ??= ConstructSut();
+        
         protected abstract TSut ConstructSut();
         
         protected virtual void Cleanup()
