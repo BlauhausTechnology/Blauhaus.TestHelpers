@@ -4,7 +4,7 @@ namespace Blauhaus.TestHelpers.Builders._Base
 {
     public abstract class BaseFixtureBuilder<TBuilder, T> : BaseBuilder<TBuilder, T> 
         where TBuilder : BaseFixtureBuilder<TBuilder, T>
-        where T : new()
+        where T : class, new()
     {
         private readonly T _t;
 

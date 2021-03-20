@@ -5,6 +5,8 @@ using System.Threading;
 using AutoFixture;
 using Blauhaus.TestHelpers.Builders._Base;
 using Moq;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable MemberCanBeProtected.Global
 
 namespace Blauhaus.TestHelpers.MockBuilders
 {
@@ -15,7 +17,7 @@ namespace Blauhaus.TestHelpers.MockBuilders
     {
 
         protected IFixture MyFixture => _fixture ??= new Fixture();
-        private IFixture _fixture;
+        private IFixture? _fixture;
 
         protected TProperty Get<TProperty>() => MyFixture.Create<TProperty>();
 

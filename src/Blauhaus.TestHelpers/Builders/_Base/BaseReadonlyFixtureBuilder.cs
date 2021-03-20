@@ -8,7 +8,9 @@ using AutoFixture.Kernel;
 
 namespace Blauhaus.TestHelpers.Builders._Base
 {
-    public abstract class BaseReadonlyFixtureBuilder<TBuilder, T>: BaseBuilder<TBuilder, T> where TBuilder : BaseReadonlyFixtureBuilder<TBuilder, T>
+    public abstract class BaseReadonlyFixtureBuilder<TBuilder, T>: BaseBuilder<TBuilder, T>
+        where TBuilder : BaseReadonlyFixtureBuilder<TBuilder, T> 
+        where T : class
     {
         private readonly Fixture _fixture;
 

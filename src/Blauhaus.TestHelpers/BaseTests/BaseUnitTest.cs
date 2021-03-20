@@ -4,19 +4,20 @@ using System.Threading;
 using AutoFixture;
 using Blauhaus.TestHelpers.MockBuilders;
 using Moq;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace Blauhaus.TestHelpers.BaseTests
 {
     public abstract class BaseUnitTest<TSut> 
     {
         protected IFixture MyFixture => _fixture ??= new Fixture();
-        private IFixture _fixture;
+        private IFixture? _fixture;
 
         protected CancellationToken CancelToken => _cancellationTokenSource.Token;
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         protected MockContainer Mocks => _mocks ??= new MockContainer();
-        private MockContainer _mocks;
+        private MockContainer? _mocks;
 
         public Func<TBuilder> AddMock<TBuilder, TMock>()
             where TMock : class
@@ -27,7 +28,18 @@ namespace Blauhaus.TestHelpers.BaseTests
             => AddMock<MockBuilder<TMock>, TMock>();
 
         private TSut _sut;
-        protected TSut Sut => _sut ??= ConstructSut();
+
+        protected TSut Sut
+        {
+            get
+            {
+                if(_sut == null || _sut.Equals(default(TSut)))
+                {
+                    _sut = ConstructSut();
+                }
+                return _sut;
+            }
+        }
         
         protected abstract TSut ConstructSut();
         
