@@ -23,8 +23,22 @@ namespace Blauhaus.TestHelpers.Builders._Base
 
         public new TBuilder With<TProperty>(Expression<Func<T, TProperty>> expression, TProperty value)
         {
+            return AddCustomization(expression, ()=> value); 
+        } 
+        
+        public TBuilder With<TProperty>(Expression<Func<T, TProperty>> expression, Func<TProperty> func)
+        {
+            return AddCustomization(expression, func); 
+        } 
 
-            var newCustomization = new OverridePropertyBuilder<T, TProperty>(expression, value);
+        public TBuilder With<TProperty>(Expression<Func<T, TProperty>> expression, IBuilder<TProperty> builder)
+        {
+            return AddCustomization(expression, () => builder.Object); 
+        }
+
+        private TBuilder AddCustomization<TProperty>(Expression<Func<T, TProperty>> expression, Func<TProperty> func)
+        {
+            var newCustomization = new OverridePropertyBuilder<T, TProperty>(expression, func);
 
             var existingCustomizationForThisProperty = _fixture.Customizations.FirstOrDefault(x =>
                 x is OverridePropertyBuilder<T, TProperty> existingCustomization && 
@@ -35,10 +49,11 @@ namespace Blauhaus.TestHelpers.Builders._Base
                 _fixture.Customizations.Remove(existingCustomizationForThisProperty);
             }
 
-            _fixture.Customizations.Add(new OverridePropertyBuilder<T, TProperty>(expression, value));
+            _fixture.Customizations.Add(newCustomization);
+            
             return (TBuilder) this;
-        } 
-
+        }
+        
         protected override T Construct()
         {
             return _fixture.Create<T>();
@@ -50,12 +65,18 @@ namespace Blauhaus.TestHelpers.Builders._Base
     internal class OverridePropertyBuilder<T, TProp> : ISpecimenBuilder
     {
         public  readonly PropertyInfo PropertyInfo;
-        private readonly TProp _value;
+        private readonly Func<TProp> _value;
 
         public OverridePropertyBuilder(Expression<Func<T, TProp>> expr, TProp value)
         {
             PropertyInfo = (expr.Body as MemberExpression)?.Member as PropertyInfo ??
                             throw new InvalidOperationException("invalid property expression");
+            _value = ()=> value;
+        }
+        public OverridePropertyBuilder(Expression<Func<T, TProp>> expr, Func<TProp> value)
+        {
+            PropertyInfo = (expr.Body as MemberExpression)?.Member as PropertyInfo ??
+                           throw new InvalidOperationException("invalid property expression");
             _value = value;
         }
 
@@ -71,7 +92,7 @@ namespace Blauhaus.TestHelpers.Builders._Base
             if (pi.ParameterType != typeof(TProp) || pi.Name != camelCase)
                 return new NoSpecimen();
 
-            return _value;
+            return _value.Invoke();
         }
     }
 }
