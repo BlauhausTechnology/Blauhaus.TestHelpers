@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Blauhaus.TestHelpers.Builders._Base;
+using Blauhaus.TestHelpers.Builders.Base;
 using Blauhaus.TestHelpers.MockBuilders;
 
 namespace Blauhaus.TestHelpers

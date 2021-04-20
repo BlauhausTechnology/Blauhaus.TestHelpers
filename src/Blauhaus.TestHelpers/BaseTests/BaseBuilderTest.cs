@@ -1,4 +1,4 @@
-﻿using Blauhaus.TestHelpers.Builders._Base;
+﻿using Blauhaus.TestHelpers.Builders.Base;
 
 namespace Blauhaus.TestHelpers.BaseTests
 {

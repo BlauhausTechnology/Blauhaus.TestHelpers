@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using AutoFixture;
 using AutoFixture.Kernel;
 
-namespace Blauhaus.TestHelpers.Builders._Base
+namespace Blauhaus.TestHelpers.Builders.Base
 {
     public abstract class BaseReadonlyFixtureBuilder<TBuilder, T>: BaseBuilder<TBuilder, T>
         where TBuilder : BaseReadonlyFixtureBuilder<TBuilder, T> 

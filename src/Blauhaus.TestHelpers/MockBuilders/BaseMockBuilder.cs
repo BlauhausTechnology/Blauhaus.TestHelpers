@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
+using System.Threading.Tasks;
 using AutoFixture;
-using Blauhaus.TestHelpers.Builders._Base;
+using Blauhaus.TestHelpers.Builders.Base;
 using Moq;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable MemberCanBeProtected.Global
@@ -29,6 +30,17 @@ namespace Blauhaus.TestHelpers.MockBuilders
         public TMockBuilder With<TProperty>(Expression<Func<TMock, TProperty>> expression, TProperty value)
         {
             Mock.Setup(expression).Returns(value);
+            return (TMockBuilder) this;
+        }
+        
+        public TMockBuilder Setup<TProperty>(Expression<Func<TMock, TProperty>> expression, TProperty value)
+        {
+            Mock.Setup(expression).Returns(value);
+            return (TMockBuilder) this;
+        }
+        public TMockBuilder SetupAsync<TProperty>(Expression<Func<TMock, Task<TProperty>>> expression, TProperty value)
+        {
+            Mock.Setup(expression).ReturnsAsync(value);
             return (TMockBuilder) this;
         }
 

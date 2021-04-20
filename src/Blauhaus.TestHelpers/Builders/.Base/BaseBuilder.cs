@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Blauhaus.TestHelpers.Builders._Base
+namespace Blauhaus.TestHelpers.Builders.Base
 {
     public abstract class BaseBuilder<TBuilder, T> : IBuilder<TBuilder, T>
         where TBuilder :  BaseBuilder<TBuilder, T>

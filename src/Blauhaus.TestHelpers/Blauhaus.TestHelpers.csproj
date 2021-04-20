@@ -10,8 +10,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoFixture" Version="4.16.0" />
-    <PackageReference Include="Blauhaus.Common.Utils" Version="1.10.2" />
+    <Compile Include="Builders\.Base\BaseBuilder.cs" />
+    <Compile Include="Builders\.Base\BaseFixtureBuilder.cs" />
+    <Compile Include="Builders\.Base\BaseReadonlyFixtureBuilder.cs" />
+    <Compile Include="Builders\.Base\Builder.cs" />
+    <Compile Include="Builders\.Base\FixtureBuilder.cs" />
+    <Compile Include="Builders\.Base\IBuilder.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.17.0" />
+    <PackageReference Include="Blauhaus.Common.Utils" Version="1.10.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="Moq" Version="4.16.1" />

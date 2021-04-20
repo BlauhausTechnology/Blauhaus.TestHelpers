@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 
-namespace Blauhaus.TestHelpers.Builders._Base
+namespace Blauhaus.TestHelpers.Builders.Base
 {
     public abstract class BaseFixtureBuilder<TBuilder, T> : BaseBuilder<TBuilder, T> 
         where TBuilder : BaseFixtureBuilder<TBuilder, T>

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.Security.Claims;
-using Blauhaus.TestHelpers.Builders._Base;
+using Blauhaus.TestHelpers.Builders.Base;
 
 namespace Blauhaus.TestHelpers.Builders
 {
