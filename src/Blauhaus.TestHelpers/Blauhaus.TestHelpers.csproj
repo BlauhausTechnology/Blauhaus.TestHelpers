@@ -12,6 +12,7 @@
   <ItemGroup>
     <Compile Include="Builders\.Base\BaseBuilder.cs" />
     <Compile Include="Builders\.Base\BaseFixtureBuilder.cs" />
+    <Compile Include="Builders\.Base\OldBaseReadonlyFixtureBuilder.cs" />
     <Compile Include="Builders\.Base\BaseReadonlyFixtureBuilder.cs" />
     <Compile Include="Builders\.Base\Builder.cs" />
     <Compile Include="Builders\.Base\FixtureBuilder.cs" />
