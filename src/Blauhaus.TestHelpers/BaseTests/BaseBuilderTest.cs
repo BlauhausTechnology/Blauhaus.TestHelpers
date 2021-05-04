@@ -4,7 +4,7 @@ namespace Blauhaus.TestHelpers.BaseTests
 {
     public abstract class BaseBuilderTest<TSut, TBuilder> : BaseUnitTest<TSut> 
         where TSut : class
-        where TBuilder : BaseRecordFixtureBuilder<TBuilder, TSut>, new()
+        where TBuilder : BaseReadonlyFixtureBuilder<TBuilder, TSut>, new()
     {
         protected readonly TBuilder Builder;
 
