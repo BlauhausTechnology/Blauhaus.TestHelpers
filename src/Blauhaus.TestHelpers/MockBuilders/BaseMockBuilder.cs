@@ -44,16 +44,14 @@ namespace Blauhaus.TestHelpers.MockBuilders
             return (TMockBuilder) this;
         }
          
-        public TMockBuilder Verify(Expression<Action<TMock>> expression, Times? times = null)
+        public TMockBuilder Verify(Expression<Action<TMock>> expression)
         {
-            if (times == null)
-            {
-                Mock.Verify(expression);
-            }
-            else
-            {
-                Mock.Verify(expression, times.Value);
-            }
+            Mock.Verify(expression);
+            return (TMockBuilder) this;
+        }
+        public TMockBuilder Verify(Expression<Action<TMock>> expression, Times times)
+        {
+            Mock.Verify(expression, times);
             return (TMockBuilder) this;
         }
 
