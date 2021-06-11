@@ -43,6 +43,19 @@ namespace Blauhaus.TestHelpers.MockBuilders
             Mock.Setup(expression).ReturnsAsync(value);
             return (TMockBuilder) this;
         }
+         
+        public TMockBuilder Verify(Expression<Action<TMock>> expression, Times? times = null)
+        {
+            if (times == null)
+            {
+                Mock.Verify(expression);
+            }
+            else
+            {
+                Mock.Verify(expression, times.Value);
+            }
+            return (TMockBuilder) this;
+        }
 
         protected T Is<T>(Expression<Func<T, bool>> func) => It.Is(func);
         protected string IsString(Expression<Func<string, bool>> func) => It.Is(func);
