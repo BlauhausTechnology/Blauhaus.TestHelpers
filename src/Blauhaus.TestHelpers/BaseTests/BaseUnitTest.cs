@@ -13,8 +13,9 @@ namespace Blauhaus.TestHelpers.BaseTests
         protected IFixture MyFixture => _fixture ??= new Fixture();
         private IFixture? _fixture;
 
-        protected CancellationToken CancelToken => _cancellationTokenSource.Token;
-        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        protected CancellationToken CancelToken => CancellationTokenSource.Token;
+        private CancellationTokenSource? _cancellationTokenSource = new();
+        private CancellationTokenSource CancellationTokenSource => _cancellationTokenSource ??= new CancellationTokenSource();
 
         protected MockContainer Mocks => _mocks ??= new MockContainer();
         private MockContainer? _mocks;
@@ -27,7 +28,7 @@ namespace Blauhaus.TestHelpers.BaseTests
         public Func<MockBuilder<TMock>> AddMock<TMock>() where TMock : class
             => AddMock<MockBuilder<TMock>, TMock>();
 
-        private TSut _sut;
+        private TSut? _sut;
 
         protected TSut Sut
         {
@@ -48,7 +49,7 @@ namespace Blauhaus.TestHelpers.BaseTests
             _sut = default;
             _fixture = null;
             _mocks?.Clear();
-            _cancellationTokenSource = new CancellationTokenSource();
+            _cancellationTokenSource = null;
         }
 
 

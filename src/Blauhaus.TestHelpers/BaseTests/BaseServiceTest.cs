@@ -23,10 +23,10 @@ namespace Blauhaus.TestHelpers.BaseTests
             return Services.BuildServiceProvider().GetRequiredService<TSut>();
         }
 
-        protected override void Cleanup()
+        protected void ResetServices()
         {
-            base.Cleanup();
             Services = new ServiceCollection();
         }
+         
     }
 }
