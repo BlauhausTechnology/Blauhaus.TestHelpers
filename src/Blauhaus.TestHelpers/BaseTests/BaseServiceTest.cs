@@ -1,11 +1,13 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Blauhaus.TestHelpers.BaseTests
 {
     public abstract class BaseServiceTest<TSut> : BaseUnitTest<TSut> where TSut : class
     {
-        protected IServiceCollection Services;
+        private IServiceCollection? _services;
+        protected IServiceCollection Services => _services ??= new ServiceCollection();
 
         protected void AddService<T>(Func<IServiceProvider, T> func) where T : class
         {
@@ -19,13 +21,14 @@ namespace Blauhaus.TestHelpers.BaseTests
 
         protected override TSut ConstructSut()
         {
-            Services.AddSingleton<TSut>();
+            Services.TryAddTransient<TSut>();
             return Services.BuildServiceProvider().GetRequiredService<TSut>();
         }
 
-        protected void ResetServices()
+        protected override void CleanupOnce()
         {
-            Services = new ServiceCollection();
+            base.CleanupOnce();
+            _services = null;
         }
          
     }

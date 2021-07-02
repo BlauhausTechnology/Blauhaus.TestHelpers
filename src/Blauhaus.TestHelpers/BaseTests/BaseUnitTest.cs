@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using AutoFixture;
 using Blauhaus.TestHelpers.MockBuilders;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -44,12 +45,17 @@ namespace Blauhaus.TestHelpers.BaseTests
         
         protected abstract TSut ConstructSut();
         
-        protected virtual void Cleanup()
+        
+        protected virtual void CleanupOnce()
         {
-            _sut = default;
             _fixture = null;
             _mocks?.Clear();
             _cancellationTokenSource = null;
+        }
+
+        protected virtual void Cleanup()
+        {
+            _sut = default;
         }
 
 
