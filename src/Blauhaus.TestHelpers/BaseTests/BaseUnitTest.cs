@@ -45,17 +45,13 @@ namespace Blauhaus.TestHelpers.BaseTests
         
         protected abstract TSut ConstructSut();
         
-        
-        protected virtual void CleanupOnce()
-        {
-            _fixture = null;
-            _mocks?.Clear();
-            _cancellationTokenSource = null;
-        }
-
+         
         protected virtual void Cleanup()
         {
             _sut = default;
+            _mocks?.Clear();
+            _fixture = null;
+            _cancellationTokenSource = null;
         }
 
 
