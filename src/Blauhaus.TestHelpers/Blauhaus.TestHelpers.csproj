@@ -13,7 +13,6 @@
     <Compile Include="Builders\.Base\BaseBuilder.cs" />
     <Compile Include="Builders\.Base\BaseFixtureBuilder.cs" />
     <Compile Include="Builders\.Base\BaseReadonlyFixtureBuilder.cs" />
-    <Compile Include="Builders\.Base\BaseRecordFixtureBuilder.cs" />
     <Compile Include="Builders\.Base\Builder.cs" />
     <Compile Include="Builders\.Base\FixtureBuilder.cs" />
     <Compile Include="Builders\.Base\IBuilder.cs" />
@@ -21,8 +20,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.17.0" />
-    <PackageReference Include="Blauhaus.Common.Utils" Version="1.11.3" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Blauhaus.Common.Utils" Version="1.11.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
     <PackageReference Include="Moq" Version="4.16.1" />
