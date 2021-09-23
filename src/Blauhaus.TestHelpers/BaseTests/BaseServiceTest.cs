@@ -22,7 +22,15 @@ namespace Blauhaus.TestHelpers.BaseTests
         protected override TSut ConstructSut()
         {
             Services.TryAddTransient<TSut>();
-            return Services.BuildServiceProvider().GetRequiredService<TSut>();
+            
+            var serviceProvider = Services.BuildServiceProvider();
+            BeforeConstructSut(serviceProvider);
+
+            return serviceProvider.GetRequiredService<TSut>();
+        }
+
+        protected virtual void BeforeConstructSut(IServiceProvider serviceProvider)
+        {
         }
 
         protected override void Cleanup()
