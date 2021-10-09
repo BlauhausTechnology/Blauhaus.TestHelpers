@@ -22,7 +22,7 @@ namespace Blauhaus.TestHelpers.Builders.Base
         protected IEnumerable<PropertyInfo> Properties => 
             _properties ??= typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
          
-        public TBuilder With<TProperty>(Expression<Func<T, TProperty>> expression, TProperty value)
+        public virtual TBuilder With<TProperty>(Expression<Func<T, TProperty>> expression, TProperty value)
         {
             var propertyName = (expression.Body as MemberExpression)?.Member.Name;
             var propertyToSet = Properties.FirstOrDefault(property => property.Name == propertyName);
@@ -39,7 +39,7 @@ namespace Blauhaus.TestHelpers.Builders.Base
 
         protected virtual T Construct()
         {
-            return (T)Activator.CreateInstance(typeof(T));
+            return (T)Activator.CreateInstance(typeof(T))!;
         } 
 
         public static T Default => Activator.CreateInstance<TBuilder>().Object;

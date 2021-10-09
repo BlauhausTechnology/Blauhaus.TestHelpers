@@ -19,7 +19,7 @@ namespace Blauhaus.TestHelpers.Builders.Base
             _fixture = new Fixture();
         }
 
-        public new TBuilder With<TProperty>(Expression<Func<T, TProperty>> expression, TProperty value)
+        public override TBuilder With<TProperty>(Expression<Func<T, TProperty>> expression, TProperty value)
         {
             return AddCustomization(expression, ()=> value); 
         } 
