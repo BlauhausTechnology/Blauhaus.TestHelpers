@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -22,18 +24,22 @@ namespace Blauhaus.TestHelpers.Builders.Base
         protected IEnumerable<PropertyInfo> Properties => 
             _properties ??= typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
          
-        public virtual TBuilder With<TProperty>(Expression<Func<T, TProperty>> expression, TProperty value)
+
+        public TBuilder With<TProperty>(Expression<Func<T, TProperty>> expression, TProperty value)
+        {
+            return WithProperty(expression, value);
+        }
+        protected virtual TBuilder WithProperty<TProperty>(Expression<Func<T, TProperty>> expression, TProperty value)
         {
             var propertyName = (expression.Body as MemberExpression)?.Member.Name;
             var propertyToSet = Properties.FirstOrDefault(property => property.Name == propertyName);
-
             if (propertyToSet != null)
             {
                 propertyToSet.SetValue(Object, value);
             }
             return (TBuilder) this;
         }
-
+          
 
         public T Object => _object ??= Construct();
 
