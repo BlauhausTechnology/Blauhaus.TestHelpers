@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -26,11 +27,19 @@ namespace Blauhaus.TestHelpers.BaseTests
             var serviceProvider = Services.BuildServiceProvider();
             BeforeConstructSut(serviceProvider);
 
-            return serviceProvider.GetRequiredService<TSut>();
+            var sut = serviceProvider.GetRequiredService<TSut>();
+
+            Task.Run(async () => await AfterConstructSutAsync(sut)).Wait();
+            return sut;
         }
 
         protected virtual void BeforeConstructSut(IServiceProvider serviceProvider)
         {
+        }
+
+        protected virtual Task AfterConstructSutAsync(TSut sut)
+        {
+            return Task.CompletedTask;
         }
 
         protected override void Cleanup()
