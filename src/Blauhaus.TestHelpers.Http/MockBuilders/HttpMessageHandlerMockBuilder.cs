@@ -17,11 +17,12 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
     public class HttpMessageHandlerMockBuilder : Mock<HttpMessageHandler>
     {
         private HttpStatusCode _code = HttpStatusCode.Accepted;
-        private string _content = string.Empty;
+        //private string _content = string.Empty;
         private string _reasonPhrase;
         private Exception? _exception;
         private Dictionary<string, string> _headers = new Dictionary<string, string>();
         private List<HttpResponseMessage>? _responses;
+        private Func<object> _contentFactory = null!;
 
         public HttpMessageHandlerMockBuilder()
         {
@@ -54,7 +55,7 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
                 {
                     ReasonPhrase = _reasonPhrase,
                     StatusCode = _code,
-                    Content = new StringContent(_content)
+                    Content = new StringContent(JsonSerializer.Serialize(_contentFactory.Invoke()))
                 };
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
@@ -100,10 +101,15 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
             return this;
         }
 
+        public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Content(Func<object> content)
+        {
+            _contentFactory = content;
+            return this;
+        }
 
         public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Content(string content)
         {
-            _content = content;
+            _contentFactory = ()=> content;
             return this;
         }
 
