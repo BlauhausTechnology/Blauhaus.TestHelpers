@@ -11,7 +11,7 @@ namespace Blauhaus.TestHelpers.Extensions
         {
             var options = new TOptions();
             var mockOptions = new Mock<IOptions<TOptions>>();
-            mockOptions.Setup(x => x.Value).Returns(optionsBuilder);
+            mockOptions.Setup(x => x.Value).Returns(optionsBuilder.Invoke);
             services.AddSingleton(mockOptions.Object);
 
             return options;

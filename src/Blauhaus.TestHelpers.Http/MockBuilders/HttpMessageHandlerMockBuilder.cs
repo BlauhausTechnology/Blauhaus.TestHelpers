@@ -130,33 +130,33 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
             return this;
         }
 
-        public void VerifyMethod(HttpMethod method)
+        public void VerifyMethod(HttpMethod method, int times = 1)
         {
             this.Protected()
-                .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Once(),
+                .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Exactly(times),
                     ItExpr.Is<HttpRequestMessage>(y => y.Method == method),
                     ItExpr.IsAny<CancellationToken>());
         }
-        public void VerifyUri(string uri)
+        public void VerifyUri(string uri, int times = 1)
         {
             this.Protected()
-                .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Once(),
+                .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Exactly(times),
                     ItExpr.Is<HttpRequestMessage>(y => y.RequestUri == new Uri(uri)),
                     ItExpr.IsAny<CancellationToken>());
         }
 
-        public void VerifyUri(Func<string, bool> predicate)
+        public void VerifyUri(Func<string, bool> predicate, int times = 1)
         {
             this.Protected()
-                .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Once(),
+                .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Exactly(times),
                     ItExpr.Is<HttpRequestMessage>(y => predicate.Invoke(y.RequestUri.AbsoluteUri)),
                     ItExpr.IsAny<CancellationToken>());
         }
 
-        public void VerifyContent(string content)
+        public void VerifyContent(string content, int times = 1)
         {
             this.Protected()
-                .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Once(),
+                .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Exactly(times),
                     ItExpr.Is<HttpRequestMessage>(y => string.Equals(y.Content.ReadAsStringAsync().Result, content, StringComparison.InvariantCultureIgnoreCase)),
                     ItExpr.IsAny<CancellationToken>());
         }
