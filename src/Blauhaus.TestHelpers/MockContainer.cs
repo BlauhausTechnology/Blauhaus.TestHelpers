@@ -7,7 +7,7 @@ namespace Blauhaus.TestHelpers
 {
     public class MockContainer
     {
-        private readonly Dictionary<Type, object> _mocks = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _mocks = new();
 
         public Func<TMockBuilder> AddMock<TMockBuilder, T>() 
             where TMockBuilder : IBuilder<TMockBuilder, T>, new() 

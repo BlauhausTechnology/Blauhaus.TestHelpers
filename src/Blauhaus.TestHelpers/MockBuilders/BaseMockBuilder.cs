@@ -22,9 +22,9 @@ namespace Blauhaus.TestHelpers.MockBuilders
 
         protected TProperty Get<TProperty>() => MyFixture.Create<TProperty>();
 
-        public readonly Mock<TMock> Mock = new Mock<TMock>();
+        public readonly Mock<TMock> Mock = new();
         public TMock Object => Mock.Object;
-        public List<TMock> ToList => new List<TMock>{Mock.Object};
+        public List<TMock> ToList => new() {Mock.Object};
         public static TMock Default => Activator.CreateInstance<TMockBuilder>().Object;
 
         public TMockBuilder With<TProperty>(Expression<Func<TMock, TProperty>> expression, TProperty value)

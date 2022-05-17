@@ -20,9 +20,9 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
         //private string _content = string.Empty;
         private string _reasonPhrase;
         private Exception? _exception;
-        private Dictionary<string, string> _headers = new Dictionary<string, string>();
+        private Dictionary<string, string> _headers = new();
         private List<HttpResponseMessage>? _responses;
-        private Func<object> _contentFactory = null!;
+        private string _content = null!;
 
         public HttpMessageHandlerMockBuilder()
         {
@@ -45,7 +45,7 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
 
                 this.Protected()
                     .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                    .Callback<HttpRequestMessage, CancellationToken>(async (m, c) => { Debug.WriteLine(await m.Content.ReadAsStringAsync()); })
+                    .Callback<HttpRequestMessage, CancellationToken>((_, _) => {  })
                     .ReturnsAsync(queue.Dequeue)
                     .Verifiable();
             }
@@ -55,7 +55,7 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
                 {
                     ReasonPhrase = _reasonPhrase,
                     StatusCode = _code,
-                    Content = new StringContent(JsonSerializer.Serialize(_contentFactory.Invoke()))
+                    Content = new StringContent(_content)
                 };
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
@@ -100,16 +100,15 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
             _responses = responses;
             return this;
         }
-
-        public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Content(Func<object> content)
-        {
-            _contentFactory = content;
-            return this;
-        }
-
+ 
         public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Content(string content)
         {
-            _contentFactory = ()=> content;
+            _content = content;
+            return this;
+        }
+        public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Content(object content)
+        {
+            _content = JsonSerializer.Serialize(content);
             return this;
         }
 

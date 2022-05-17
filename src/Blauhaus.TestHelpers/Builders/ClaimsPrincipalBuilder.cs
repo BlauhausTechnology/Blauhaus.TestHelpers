@@ -9,7 +9,7 @@ namespace Blauhaus.TestHelpers.Builders
     {
         private readonly ClaimsPrincipal _claimsPrincipal;
         private string _authSchemeName = string.Empty;
-        private readonly List<Claim> _claims = new List<Claim>();
+        private readonly List<Claim> _claims = new();
 
 
         public ClaimsPrincipalBuilder(bool isAuthenticated = true)
