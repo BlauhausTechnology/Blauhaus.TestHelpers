@@ -18,16 +18,22 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
     {
         private HttpStatusCode _code = HttpStatusCode.Accepted;
         //private string _content = string.Empty;
-        private string _reasonPhrase;
+        private string _reasonPhrase = string.Empty;
         private Exception? _exception;
         private Dictionary<string, string> _headers = new();
         private List<HttpResponseMessage>? _responses;
         private string _content = null!;
 
+        public List<HttpRequestMessage> SentRequests { get; } = new();
+
         public HttpMessageHandlerMockBuilder()
         {
             this.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .Callback((string send, HttpRequestMessage request, CancellationToken token) =>
+                {
+                    SentRequests.Add(request);
+                })
                 .ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.Accepted,
