@@ -14,7 +14,7 @@ using Moq.Protected;
 
 namespace Blauhaus.TestHelpers.Http.MockBuilders
 {
-    public class HttpMessageHandlerMockBuilder : Mock<HttpMessageHandler>
+public class HttpRequestHandlerMockBuilder : Mock<HttpMessageHandler>
     {
         private HttpStatusCode _code = HttpStatusCode.Accepted;
         //private string _content = string.Empty;
@@ -26,14 +26,11 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
 
         public List<HttpRequestMessage> SentRequests { get; } = new();
 
-        public HttpMessageHandlerMockBuilder()
+        public HttpRequestHandlerMockBuilder()
         {
             this.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                .Callback((string send, HttpRequestMessage request, CancellationToken token) =>
-                {
-                    SentRequests.Add(request);
-                })
+                .Callback((HttpRequestMessage request, CancellationToken _) => { SentRequests.Add(request); })
                 .ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.Accepted,
@@ -42,7 +39,7 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
                 .Verifiable();
         }
         
-        public HttpMessageHandlerMockBuilder Build()
+        public HttpRequestHandlerMockBuilder Build()
         {
 
             if (_responses != null)
@@ -51,7 +48,7 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
 
                 this.Protected()
                     .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                    .Callback<HttpRequestMessage, CancellationToken>((_, _) => {  })
+                     .Callback((HttpRequestMessage request, CancellationToken _) => { SentRequests.Add(request); })
                     .ReturnsAsync(queue.Dequeue)
                     .Verifiable();
             }
@@ -74,6 +71,7 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
                 {
                     this.Protected()
                         .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                        .Callback((HttpRequestMessage request, CancellationToken _) => { SentRequests.Add(request); })
                         .ThrowsAsync(_exception)
                         .Verifiable();
                 }
@@ -81,7 +79,7 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
                 {
                     this.Protected()
                         .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                        .Callback<HttpRequestMessage, CancellationToken>(async (m, c) => { Debug.WriteLine(await m.Content.ReadAsStringAsync()); })
+                        .Callback((HttpRequestMessage request, CancellationToken _) => { SentRequests.Add(request); })
                         .ReturnsAsync(response)
                         .Verifiable();
                 }
@@ -90,46 +88,46 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
             return this;
         }
 
-        public HttpMessageHandlerMockBuilder Where_SendAsync_returns_StatusCode(HttpStatusCode code)
+        public HttpRequestHandlerMockBuilder Where_SendAsync_returns_StatusCode(HttpStatusCode code)
         {
             _code = code;
             return this;
         }
 
-        public HttpMessageHandlerMockBuilder Where_SendAsync_throws(Exception e)
+        public HttpRequestHandlerMockBuilder Where_SendAsync_throws(Exception e)
         {
             _exception = e;
             return this;
         }
-        public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Sequence(List<HttpResponseMessage> responses)
+        public HttpRequestHandlerMockBuilder Where_SendAsync_returns_Sequence(List<HttpResponseMessage> responses)
         {
             _responses = responses;
             return this;
         }
  
-        public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Content(string content)
+        public HttpRequestHandlerMockBuilder Where_SendAsync_returns_Content(string content)
         {
             _content = content;
             return this;
         }
-        public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Content(object content)
+        public HttpRequestHandlerMockBuilder Where_SendAsync_returns_Content(object content)
         {
             _content = JsonSerializer.Serialize(content);
             return this;
         }
 
-        public HttpMessageHandlerMockBuilder Where_SendAsync_returns_ReasonPhrase(string value)
+        public HttpRequestHandlerMockBuilder Where_SendAsync_returns_ReasonPhrase(string value)
         {
             _reasonPhrase = value;
             return this;
         }
         
-        public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Headers(Dictionary<string, string> headers)
+        public HttpRequestHandlerMockBuilder Where_SendAsync_returns_Headers(Dictionary<string, string> headers)
         {
             _headers = headers;
             return this;
         }
-        public HttpMessageHandlerMockBuilder Where_SendAsync_returns_Header(string key, string value)
+        public HttpRequestHandlerMockBuilder Where_SendAsync_returns_Header(string key, string value)
         {
             _headers[key] = value;
             return this;
@@ -181,6 +179,13 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
                     ItExpr.Is<HttpRequestMessage>(y => y.Headers.Any(x => x.Key == key && x.Value.First() == value)),
                     ItExpr.IsAny<CancellationToken>());
         }
+        public void VerifyHeader(string key, Func<string, bool> predicate, int times = 1)
+        {
+            this.Protected()
+                .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Exactly(times),
+                    ItExpr.Is<HttpRequestMessage>(y => y.Headers.Any(x => x.Key == key && predicate.Invoke(x.Value.First()))),
+                    ItExpr.IsAny<CancellationToken>());
+        }
 
         public void VerifyAuthHeader(string scheme, string value, int times = 1)
         {
@@ -189,6 +194,16 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
                     ItExpr.Is<HttpRequestMessage>(y => 
                         y.Headers.Authorization.Scheme == scheme && 
                         y.Headers.Authorization.Parameter == value),
+                    ItExpr.IsAny<CancellationToken>());
+        }
+
+        public void VerifyAuthHeaderExists(string scheme, int times = 1)
+        {
+            this.Protected()
+                .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Exactly(times),
+                    ItExpr.Is<HttpRequestMessage>(y => 
+                        y.Headers.Authorization.Scheme == scheme && 
+                        y.Headers.Authorization.Parameter.Length > 0),
                     ItExpr.IsAny<CancellationToken>());
         }
 
@@ -201,4 +216,5 @@ namespace Blauhaus.TestHelpers.Http.MockBuilders
                     ItExpr.IsAny<CancellationToken>());
         }
     }
+
 }
