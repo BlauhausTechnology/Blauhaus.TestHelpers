@@ -152,7 +152,7 @@ public class HttpRequestHandlerMockBuilder : Mock<HttpMessageHandler>
         {
             this.Protected()
                 .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Exactly(times),
-                    ItExpr.Is<HttpRequestMessage>(y => predicate.Invoke(y.RequestUri.AbsoluteUri)),
+                    ItExpr.Is<HttpRequestMessage>(y => predicate.Invoke(y.RequestUri!.AbsoluteUri)),
                     ItExpr.IsAny<CancellationToken>());
         }
 
@@ -160,7 +160,7 @@ public class HttpRequestHandlerMockBuilder : Mock<HttpMessageHandler>
         {
             this.Protected()
                 .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Exactly(times),
-                    ItExpr.Is<HttpRequestMessage>(y => string.Equals(y.Content.ReadAsStringAsync().Result, content, StringComparison.InvariantCultureIgnoreCase)),
+                    ItExpr.Is<HttpRequestMessage>(y => string.Equals(y.Content!.ReadAsStringAsync().Result, content, StringComparison.InvariantCultureIgnoreCase)),
                     ItExpr.IsAny<CancellationToken>());
         }
 
@@ -168,7 +168,7 @@ public class HttpRequestHandlerMockBuilder : Mock<HttpMessageHandler>
         {
             this.Protected()
                 .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Once(),
-                    ItExpr.Is<HttpRequestMessage>(y => predicate.Invoke(y.Content.ReadAsStringAsync().Result)),
+                    ItExpr.Is<HttpRequestMessage>(y => predicate.Invoke(y.Content!.ReadAsStringAsync().Result)),
                     ItExpr.IsAny<CancellationToken>());
         }
          
@@ -192,7 +192,7 @@ public class HttpRequestHandlerMockBuilder : Mock<HttpMessageHandler>
             this.Protected()
                 .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Exactly(times),
                     ItExpr.Is<HttpRequestMessage>(y => 
-                        y.Headers.Authorization.Scheme == scheme && 
+                        y.Headers.Authorization!.Scheme == scheme && 
                         y.Headers.Authorization.Parameter == value),
                     ItExpr.IsAny<CancellationToken>());
         }
@@ -202,8 +202,8 @@ public class HttpRequestHandlerMockBuilder : Mock<HttpMessageHandler>
             this.Protected()
                 .Verify<Task<HttpResponseMessage>>("SendAsync", Times.Exactly(times),
                     ItExpr.Is<HttpRequestMessage>(y => 
-                        y.Headers.Authorization.Scheme == scheme && 
-                        y.Headers.Authorization.Parameter.Length > 0),
+                        y.Headers.Authorization!.Scheme == scheme && 
+                        y.Headers.Authorization.Parameter!.Length > 0),
                     ItExpr.IsAny<CancellationToken>());
         }
 

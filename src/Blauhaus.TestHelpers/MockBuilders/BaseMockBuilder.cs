@@ -12,7 +12,7 @@ using Moq;
 namespace Blauhaus.TestHelpers.MockBuilders
 {
 
-    public abstract class BaseMockBuilder<TMockBuilder, TMock> : IBuilder<TMockBuilder, TMock>
+    public abstract class BaseMockBuilder<TMockBuilder, TMock> : IMockBuilder<TMockBuilder, TMock>
         where TMockBuilder : BaseMockBuilder<TMockBuilder, TMock>
         where TMock : class
     {
@@ -22,7 +22,7 @@ namespace Blauhaus.TestHelpers.MockBuilders
 
         protected TProperty Get<TProperty>() => MyFixture.Create<TProperty>();
 
-        public readonly Mock<TMock> Mock = new();
+        public Mock<TMock> Mock { get; } = new();
         public TMock Object => Mock.Object;
         public List<TMock> ToList => new() {Mock.Object};
         public static TMock Default => Activator.CreateInstance<TMockBuilder>().Object;
