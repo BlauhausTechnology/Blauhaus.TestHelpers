@@ -9,6 +9,11 @@ namespace Blauhaus.TestHelpers.BaseTests
     {
         private IServiceCollection? _services;
         protected IServiceCollection Services => _services ??= new ServiceCollection();
+        
+        protected void AddService<T>(Func<T> func) where T : class
+        {
+            Services.AddSingleton<T>(_ => func.Invoke());
+        }
 
         protected void AddService<T>(Func<IServiceProvider, T> func) where T : class
         {
