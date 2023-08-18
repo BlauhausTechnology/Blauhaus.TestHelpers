@@ -35,6 +35,7 @@ namespace Blauhaus.TestHelpers.BaseTests
             var sut = serviceProvider.GetRequiredService<TSut>();
 
             Task.Run(async () => await AfterConstructSutAsync(sut)).Wait();
+            Sut = sut;
             return sut;
         }
 

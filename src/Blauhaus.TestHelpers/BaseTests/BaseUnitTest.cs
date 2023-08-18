@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq.Expressions;
 using System.Threading;
 using AutoFixture;
 using Blauhaus.TestHelpers.MockBuilders;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
+
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace Blauhaus.TestHelpers.BaseTests
@@ -41,6 +39,7 @@ namespace Blauhaus.TestHelpers.BaseTests
                 }
                 return _sut;
             }
+            set => _sut = value;
         }
         
         protected abstract TSut ConstructSut();
