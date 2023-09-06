@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq.Expressions;
+using System.Text.Json;
 using Blauhaus.Common.Utils.Extensions;
 using Blauhaus.TestHelpers.Extensions;
 
@@ -31,7 +32,17 @@ namespace Blauhaus.TestHelpers.PropertiesChanged.PropertiesChanged
         {
             if (e.PropertyName == _propertyName)
             {
-                Add(_propertyFunc.Invoke((TBindableObject)sender));
+                var property = _propertyFunc.Invoke((TBindableObject)sender);
+                string serializedProperty = JsonSerializer.Serialize(property);
+                object? copiedProperty = JsonSerializer.Deserialize(serializedProperty, typeof(TProperty));
+                if (copiedProperty != null)
+                {
+                    Add((TProperty)copiedProperty);
+                }
+                else
+                {
+                    Add(property);
+                }
             }
         }
         
