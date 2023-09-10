@@ -19,7 +19,9 @@ jobs:
         dotnet build ./src/Blauhaus.TestHelpers.sln --configuration Release
         dotnet pack ./src/Blauhaus.TestHelpers/Blauhaus.TestHelpers.csproj -p:PackageVersion=${VERSION_NAME} --no-build --output ./ --configuration Release 
         dotnet pack ./src/Blauhaus.TestHelpers.Http/Blauhaus.TestHelpers.Http.csproj -p:PackageVersion=${VERSION_NAME} --no-build --output ./ --configuration Release 
+        dotnet pack ./src/Blauhaus.TestHelpers.Http/Blauhaus.TestHelpers.NUnit.csproj -p:PackageVersion=${VERSION_NAME} --no-build --output ./ --configuration Release 
      - name: Deploy NuGet Package
        run:  |
         dotnet nuget push /home/runner/work/Blauhaus.TestHelpers/Blauhaus.TestHelpers/Blauhaus.TestHelpers.${VERSION_NAME}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
         dotnet nuget push /home/runner/work/Blauhaus.TestHelpers/Blauhaus.TestHelpers/Blauhaus.TestHelpers.Http.${VERSION_NAME}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+        dotnet nuget push /home/runner/work/Blauhaus.TestHelpers/Blauhaus.TestHelpers/Blauhaus.TestHelpers.NUnit.${VERSION_NAME}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json

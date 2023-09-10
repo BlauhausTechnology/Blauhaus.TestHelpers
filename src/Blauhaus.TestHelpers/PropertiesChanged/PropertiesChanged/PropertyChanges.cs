@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq.Expressions;
-using System.Text.Json;
 using Blauhaus.Common.Utils.Extensions;
 using Blauhaus.TestHelpers.Extensions;
+#if !NETSTANDARD2_0
+using System.Text.Json;
+#endif
 
 namespace Blauhaus.TestHelpers.PropertiesChanged.PropertiesChanged
 {
@@ -33,6 +35,7 @@ namespace Blauhaus.TestHelpers.PropertiesChanged.PropertiesChanged
             if (e.PropertyName == _propertyName)
             {
                 var property = _propertyFunc.Invoke((TBindableObject)sender);
+#if !NETSTANDARD2_0
                 string serializedProperty = JsonSerializer.Serialize(property);
                 object? copiedProperty = JsonSerializer.Deserialize(serializedProperty, typeof(TProperty));
                 if (copiedProperty != null)
@@ -43,6 +46,8 @@ namespace Blauhaus.TestHelpers.PropertiesChanged.PropertiesChanged
                 {
                     Add(property);
                 }
+#endif
+                Add(property);
             }
         }
         
