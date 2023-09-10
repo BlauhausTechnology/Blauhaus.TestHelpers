@@ -4,15 +4,16 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Blauhaus.TestHelpers.Builders._Base
+namespace Blauhaus.TestHelpers.Builders.Base
 {
     public abstract class BaseBuilder<TBuilder, T> : IBuilder<TBuilder, T>
         where TBuilder :  BaseBuilder<TBuilder, T>
+        where T : class
     {
 
-        private Random _random;
-        private PropertyInfo[] _properties;
-        private T _object;
+        private Random? _random;
+        private PropertyInfo[]? _properties;
+        private T? _object;
 
 
         protected Random Random => 
@@ -22,38 +23,27 @@ namespace Blauhaus.TestHelpers.Builders._Base
             _properties ??= typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
          
 
-        protected BaseBuilder()
-        {
-        }
-
         public TBuilder With<TProperty>(Expression<Func<T, TProperty>> expression, TProperty value)
+        {
+            return WithProperty(expression, value);
+        }
+        protected virtual TBuilder WithProperty<TProperty>(Expression<Func<T, TProperty>> expression, TProperty value)
         {
             var propertyName = (expression.Body as MemberExpression)?.Member.Name;
             var propertyToSet = Properties.FirstOrDefault(property => property.Name == propertyName);
-
             if (propertyToSet != null)
             {
                 propertyToSet.SetValue(Object, value);
             }
-            return this as TBuilder;
+            return (TBuilder) this;
         }
+          
 
-
-        public T Object
-        {
-            get
-            {
-                if (_object == null)
-                {
-                    _object = Construct();
-                }
-                return _object;
-            } 
-        }
+        public T Object => _object ??= Construct();
 
         protected virtual T Construct()
         {
-            return (T)Activator.CreateInstance(typeof(T));
+            return (T)Activator.CreateInstance(typeof(T))!;
         } 
 
         public static T Default => Activator.CreateInstance<TBuilder>().Object;
