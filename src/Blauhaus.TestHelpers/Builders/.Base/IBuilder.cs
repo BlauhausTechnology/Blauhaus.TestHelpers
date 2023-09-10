@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace Blauhaus.TestHelpers.Builders._Base
+namespace Blauhaus.TestHelpers.Builders.Base
 {
 
     public interface IBuilder<out T>

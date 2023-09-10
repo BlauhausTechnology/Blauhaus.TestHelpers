@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Reflection.Emit;
 using System.Security.Claims;
-using Blauhaus.TestHelpers.Builders._Base;
+using Blauhaus.TestHelpers.Builders.Base;
 
 namespace Blauhaus.TestHelpers.Builders
 {
@@ -9,7 +8,7 @@ namespace Blauhaus.TestHelpers.Builders
     {
         private readonly ClaimsPrincipal _claimsPrincipal;
         private string _authSchemeName = string.Empty;
-        private readonly List<Claim> _claims = new List<Claim>();
+        private readonly List<Claim> _claims = new();
 
 
         public ClaimsPrincipalBuilder(bool isAuthenticated = true)

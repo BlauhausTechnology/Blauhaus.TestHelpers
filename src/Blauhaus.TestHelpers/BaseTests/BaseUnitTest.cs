@@ -1,22 +1,23 @@
 ﻿using System;
-using System.Linq.Expressions;
 using System.Threading;
 using AutoFixture;
 using Blauhaus.TestHelpers.MockBuilders;
-using Moq;
+
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace Blauhaus.TestHelpers.BaseTests
 {
     public abstract class BaseUnitTest<TSut> 
     {
         protected IFixture MyFixture => _fixture ??= new Fixture();
-        private IFixture _fixture;
+        private IFixture? _fixture;
 
-        protected CancellationToken CancelToken => _cancellationTokenSource.Token;
-        private CancellationTokenSource _cancellationTokenSource;
+        protected CancellationToken CancelToken => CancellationTokenSource.Token;
+        private CancellationTokenSource? _cancellationTokenSource = new();
+        private CancellationTokenSource CancellationTokenSource => _cancellationTokenSource ??= new CancellationTokenSource();
 
         protected MockContainer Mocks => _mocks ??= new MockContainer();
-        private MockContainer _mocks;
+        private MockContainer? _mocks;
 
         public Func<TBuilder> AddMock<TBuilder, TMock>()
             where TMock : class
@@ -26,16 +27,30 @@ namespace Blauhaus.TestHelpers.BaseTests
         public Func<MockBuilder<TMock>> AddMock<TMock>() where TMock : class
             => AddMock<MockBuilder<TMock>, TMock>();
 
-        private TSut _sut;
-        protected TSut Sut => _sut ??= ConstructSut();
+        private TSut? _sut;
+
+        protected TSut Sut
+        {
+            get
+            {
+                if(_sut == null || _sut.Equals(default(TSut)))
+                {
+                    _sut = ConstructSut();
+                }
+                return _sut;
+            }
+            set => _sut = value;
+        }
+        
         protected abstract TSut ConstructSut();
         
+         
         protected virtual void Cleanup()
         {
             _sut = default;
-            _fixture = null;
             _mocks?.Clear();
-            _cancellationTokenSource = new CancellationTokenSource();
+            _fixture = null;
+            _cancellationTokenSource = null;
         }
 
 

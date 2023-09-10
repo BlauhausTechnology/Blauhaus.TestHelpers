@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Blauhaus.TestHelpers.Builders._Base;
+using Blauhaus.TestHelpers.Builders.Base;
 using Blauhaus.TestHelpers.MockBuilders;
 
 namespace Blauhaus.TestHelpers
 {
     public class MockContainer
     {
-        private readonly Dictionary<Type, object> _mocks = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _mocks = new();
 
         public Func<TMockBuilder> AddMock<TMockBuilder, T>() 
             where TMockBuilder : IBuilder<TMockBuilder, T>, new() 
