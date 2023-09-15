@@ -46,8 +46,10 @@ namespace Blauhaus.TestHelpers.PropertiesChanged.PropertiesChanged
                 {
                     Add(property);
                 }
-#endif
+#else
                 Add(property);
+#endif
+
             }
         }
         
