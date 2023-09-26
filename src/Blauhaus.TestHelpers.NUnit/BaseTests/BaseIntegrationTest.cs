@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using Onsight.IntegrationTests.Base;
 
 namespace Blauhaus.TestHelpers.NUnit.BaseTests;
 
