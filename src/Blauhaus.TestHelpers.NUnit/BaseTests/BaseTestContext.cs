@@ -1,13 +1,10 @@
 ﻿using Blauhaus.Common.Abstractions;
 using Blauhaus.Ioc.DotNetCoreIocService;
-using Blauhaus.TestHelpers;
-using Blauhaus.TestHelpers.BaseTests;
 using Blauhaus.TestHelpers.MockBuilders;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NUnitLoggerProvider = Blauhaus.TestHelpers.NUnit.BaseTests.NUnitLoggerProvider;
 
-namespace Onsight.IntegrationTests.Base;
+namespace Blauhaus.TestHelpers.NUnit.BaseTests;
  
 public abstract class BaseTestContext : IAsyncInitializable, IAsyncDisposable
 {
