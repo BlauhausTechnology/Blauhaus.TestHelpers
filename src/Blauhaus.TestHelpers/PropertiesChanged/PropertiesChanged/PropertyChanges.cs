@@ -37,7 +37,15 @@ namespace Blauhaus.TestHelpers.PropertiesChanged.PropertiesChanged
                 var property = _propertyFunc.Invoke((TBindableObject)sender);
 #if !NETSTANDARD2_0
                 string serializedProperty = JsonSerializer.Serialize(property);
-                object? copiedProperty = JsonSerializer.Deserialize(serializedProperty, typeof(TProperty));
+                object? copiedProperty = null;
+                try
+                {
+                    copiedProperty = JsonSerializer.Deserialize(serializedProperty, typeof(TProperty));
+                }
+                catch (Exception)
+                {
+                    //do nothing
+                }
                 if (copiedProperty != null)
                 {
                     Add((TProperty)copiedProperty);
